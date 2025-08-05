@@ -1,0 +1,275 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* CultivateCo Brand CSS Custom Properties */
+@layer base {
+  :root {
+    /* CultivateCo Brand Colors */
+    --cultivateco-cream: #fbfaf7;
+    --cultivateco-blue: #0b447a;
+    --cultivateco-green: #154438;
+    
+    /* UI System Colors using CultivateCo Brand */
+    --background: 251 250 247; /* #fbfaf7 - CultivateCo cream */
+    --foreground: 31 41 55; /* Dark text on cream background */
+    --card: 251 250 247; /* #fbfaf7 - CultivateCo cream */
+    --card-foreground: 31 41 55;
+    --popover: 251 250 247; /* #fbfaf7 */
+    --popover-foreground: 31 41 55;
+    --primary: 21 68 56; /* #154438 - CultivateCo green */
+    --primary-foreground: 251 250 247; /* CultivateCo cream text on green */
+    --secondary: 11 68 122; /* #0b447a - CultivateCo blue */
+    --secondary-foreground: 251 250 247; /* CultivateCo cream text on blue */
+    --muted: 245 244 241; /* Slightly darker cream */
+    --muted-foreground: 107 114 128;
+    --accent: 245 244 241;
+    --accent-foreground: 21 68 56; /* CultivateCo green */
+    --destructive: 239 68 68;
+    --destructive-foreground: 248 250 252;
+    --border: 229 231 235;
+    --input: 229 231 235;
+    --ring: 21 68 56; /* CultivateCo green for focus rings */
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    /* Dark mode using CultivateCo brand colors */
+    --background: 15 23 42; /* Dark background */
+    --foreground: 251 250 247; /* CultivateCo cream text */
+    --card: 30 41 59;
+    --card-foreground: 251 250 247;
+    --popover: 30 41 59;
+    --popover-foreground: 251 250 247;
+    --primary: 21 68 56; /* Keep CultivateCo green */
+    --primary-foreground: 251 250 247;
+    --secondary: 11 68 122; /* Keep CultivateCo blue */
+    --secondary-foreground: 251 250 247;
+    --muted: 51 65 85;
+    --muted-foreground: 148 163 184;
+    --accent: 51 65 85;
+    --accent-foreground: 251 250 247;
+    --destructive: 220 38 38;
+    --destructive-foreground: 248 250 252;
+    --border: 51 65 85;
+    --input: 51 65 85;
+    --ring: 21 68 56; /* CultivateCo green focus */
+  }
+}
+
+/* Global Base Styles */
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Cannabis Industry Typography */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display tracking-tight;
+  }
+
+  h1 {
+    @apply text-4xl font-bold text-cultivateco-green lg:text-5xl;
+  }
+
+  h2 {
+    @apply text-3xl font-semibold text-cultivateco-green lg:text-4xl;
+  }
+
+  h3 {
+    @apply text-2xl font-semibold text-cultivateco-green lg:text-3xl;
+  }
+
+  h4 {
+    @apply text-xl font-medium text-cultivateco-green lg:text-2xl;
+  }
+
+  /* Professional Cannabis Links */
+  a {
+    @apply text-cultivateco-blue hover:text-cultivateco-green transition-colors duration-200;
+  }
+
+  /* Cannabis Form Elements */
+  input[type="email"],
+  input[type="password"],
+  input[type="text"],
+  input[type="tel"],
+  input[type="url"],
+  input[type="search"],
+  textarea,
+  select {
+    @apply border-gray-300 rounded-md shadow-sm focus:border-cultivateco-green focus:ring-cultivateco-green focus:ring-1;
+  }
+
+  /* Cannabis Button Base Styles */
+  button {
+    @apply transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-cultivateco-green focus:ring-offset-2;
+  }
+
+  /* Cannabis Scrollbar Styling */
+  ::-webkit-scrollbar {
+    @apply w-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-cultivateco-green rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-cultivateco-blue;
+  }
+}
+
+/* Cannabis Business Component Utilities */
+@layer components {
+  /* CultivateCo Button Variants */
+  .btn-cultivateco-primary {
+    @apply bg-cultivateco-green text-cultivateco-cream px-6 py-3 rounded-lg font-medium hover:bg-cultivateco-green/90 focus:ring-2 focus:ring-cultivateco-green focus:ring-offset-2 transition-all duration-200;
+  }
+
+  .btn-cultivateco-secondary {
+    @apply bg-cultivateco-blue text-cultivateco-cream px-6 py-3 rounded-lg font-medium hover:bg-cultivateco-blue/90 focus:ring-2 focus:ring-cultivateco-blue focus:ring-offset-2 transition-all duration-200;
+  }
+
+  .btn-cultivateco-outline {
+    @apply border-2 border-cultivateco-green text-cultivateco-green px-6 py-3 rounded-lg font-medium hover:bg-cultivateco-green hover:text-cultivateco-cream focus:ring-2 focus:ring-cultivateco-green focus:ring-offset-2 transition-all duration-200;
+  }
+
+  /* Cannabis Dashboard Cards */
+  .card-cultivateco {
+    @apply bg-cultivateco-cream border border-gray-200 rounded-lg shadow-cultivateco p-6;
+  }
+
+  .card-cultivateco-elevated {
+    @apply bg-cultivateco-cream border border-gray-200 rounded-lg shadow-cultivateco-lg p-6 hover:shadow-xl transition-shadow duration-200;
+  }
+
+  /* Cannabis Compliance Status Indicators */
+  .status-compliant {
+    @apply bg-cultivateco-green/10 text-cultivateco-green border border-cultivateco-green/20 px-3 py-1 rounded-full text-sm font-medium;
+  }
+
+  .status-warning {
+    @apply bg-amber-50 text-amber-700 border border-amber-200 px-3 py-1 rounded-full text-sm font-medium;
+  }
+
+  .status-violation {
+    @apply bg-red-50 text-red-700 border border-red-200 px-3 py-1 rounded-full text-sm font-medium;
+  }
+
+  /* Cannabis Analytics Metrics */
+  .metric-card {
+    @apply card-cultivateco flex flex-col space-y-2;
+  }
+
+  .metric-value {
+    @apply text-2xl font-bold text-cultivateco-green;
+  }
+
+  .metric-label {
+    @apply text-sm font-medium text-gray-600;
+  }
+
+  .metric-change-positive {
+    @apply text-cultivateco-green text-sm font-medium;
+  }
+
+  .metric-change-negative {
+    @apply text-red-600 text-sm font-medium;
+  }
+
+  /* Cannabis Navigation */
+  .nav-cultivateco {
+    @apply bg-cultivateco-cream border-b border-gray-200 shadow-sm;
+  }
+
+  .nav-link {
+    @apply text-gray-700 hover:text-cultivateco-green px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200;
+  }
+
+  .nav-link-active {
+    @apply text-cultivateco-green bg-cultivateco-green/5 px-3 py-2 rounded-md text-sm font-medium;
+  }
+
+  /* Cannabis Form Groups */
+  .form-group {
+    @apply space-y-2;
+  }
+
+  .form-label {
+    @apply block text-sm font-medium text-gray-700;
+  }
+
+  .form-input {
+    @apply block w-full border-gray-300 rounded-md shadow-sm focus:border-cultivateco-green focus:ring-cultivateco-green focus:ring-1;
+  }
+
+  .form-error {
+    @apply text-red-600 text-sm mt-1;
+  }
+
+  /* Cannabis Loading States */
+  .loading-pulse {
+    @apply animate-pulse-cultivateco;
+  }
+
+  .loading-spinner {
+    @apply animate-spin rounded-full border-2 border-cultivateco-green border-t-transparent;
+  }
+}
+
+/* Cannabis Business Utilities */
+@layer utilities {
+  /* CultivateCo Brand Gradients */
+  .bg-cultivateco-gradient {
+    background: linear-gradient(135deg, #154438 0%, #0b447a 100%);
+  }
+
+  .bg-cultivateco-hero {
+    background: linear-gradient(135deg, #fbfaf7 0%, #f5f4f1 100%);
+  }
+
+  /* Cannabis Text Gradients */
+  .text-cultivateco-gradient {
+    @apply bg-gradient-to-r from-cultivateco-green to-cultivateco-blue bg-clip-text text-transparent;
+  }
+
+  /* Cannabis Focus States */
+  .focus-cultivateco {
+    @apply focus:outline-none focus:ring-2 focus:ring-cultivateco-green focus:ring-offset-2;
+  }
+
+  /* Cannabis Hover Effects */
+  .hover-lift {
+    @apply hover:-translate-y-1 hover:shadow-cultivateco-lg transition-all duration-200;
+  }
+
+  /* Cannabis Professional Shadows */
+  .shadow-cultivateco-inset {
+    box-shadow: inset 0 2px 4px 0 rgba(21, 68, 56, 0.06);
+  }
+}
+
+/* Cannabis Print Styles */
+@media print {
+  .print-hide {
+    @apply hidden;
+  }
+  
+  .print-show {
+    @apply block;
+  }
+  
+  body {
+    @apply text-black bg-white;
+  }
+}
