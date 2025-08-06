@@ -1,0 +1,227 @@
+# Netlify configuration for CultivateCo Cannabis Business Management Platform
+[build]
+  # Build command for Next.js static export
+  command = "npm run build"
+  
+  # Directory to publish (Next.js static export output)
+  publish = "out"
+  
+  # Node.js version
+  node_version = "18"
+
+# Environment variables (set these in Netlify dashboard)
+[build.environment]
+  # Next.js configuration
+  NEXT_TELEMETRY_DISABLED = "1"
+  
+  # Cannabis API configuration (set actual values in Netlify dashboard)
+  NEXT_PUBLIC_API_BASE_URL = "https://api.cultivateco.com"
+  NEXT_PUBLIC_METRC_API_URL = "https://api-ca.metrc.com"
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY = "pk_test_your_stripe_key"
+  
+  # Authentication (set actual values in Netlify dashboard)
+  NEXTAUTH_SECRET = "your-nextauth-secret"
+  NEXTAUTH_URL = "https://your-domain.netlify.app"
+  
+  # Database (set actual values in Netlify dashboard)
+  DATABASE_URL = "your-database-connection-string"
+  
+  # Cannabis compliance APIs (set actual values in Netlify dashboard)
+  METRC_VENDOR_API_KEY = "your-metrc-vendor-key"
+  METRC_USER_API_KEY = "your-metrc-user-key"
+
+# Redirects for Single Page Application (SPA) routing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  conditions = {Role = ["public"]}
+
+# Authentication redirects
+[[redirects]]
+  from = "/app/*"
+  to = "/auth/signin"
+  status = 302
+  conditions = {Role = ["!admin", "!manager", "!budtender"]}
+
+# API redirects to external services
+[[redirects]]
+  from = "/api/cannabis/*"
+  to = "https://api.cultivateco.com/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/metrc/*"
+  to = "https://api-ca.metrc.com/:splat"
+  status = 200
+  force = true
+  headers = {Authorization = "Basic your-metrc-auth-token"}
+
+# Static asset caching
+[[headers]]
+  for = "/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Security headers for cannabis business application
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Content Security Policy for cannabis business platform
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://js.stripe.com https://maps.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://api.cultivateco.com https://api-ca.metrc.com https://api.stripe.com wss:; media-src 'self' data: blob:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
+    
+    # Security headers
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=(self)"
+    
+    # Cannabis business specific headers
+    X-Robots-Tag = "noindex, nofollow"  # Keep cannabis business private
+    X-Cannabis-Compliance = "metrc-integrated"
+
+# Forms handling for contact and support
+[[redirects]]
+  from = "/api/contact"
+  to = "/.netlify/functions/contact"
+  status = 200
+
+[[redirects]]
+  from = "/api/support"
+  to = "/.netlify/functions/support"
+  status = 200
+
+# Error pages
+[[redirects]]
+  from = "/404"
+  to = "/404.html"
+  status = 404
+
+[[redirects]]
+  from = "/500"
+  to = "/500.html"
+  status = 500
+
+# Prerender configuration for better SEO and loading
+[[plugins]]
+package = "@netlify/plugin-nextjs"
+
+  [plugins.inputs]
+    # Enable Next.js features
+    target = "serverless"
+    
+    # Cannabis business specific optimizations
+    distDir = "out"
+    
+    # Enable image optimization
+    images = { domains = ["cultivateco.com", "images.unsplash.com"], formats = ["webp", "avif"] }
+
+# Branch deploy settings
+[context.production]
+  command = "npm run build && npm run export"
+  
+[context.deploy-preview]
+  command = "npm run build"
+  
+[context.branch-deploy]
+  command = "npm run build"
+
+# Development context
+[context.dev]
+  command = "npm run dev"
+  port = 3000
+  targetPort = 3000
+  publish = "out"
+
+# Functions configuration for serverless API
+[functions]
+  directory = ".netlify/functions/"
+  node_bundler = "nft"
+
+# Edge functions for cannabis compliance checking
+[[edge_functions]]
+  function = "cannabis-age-verification"
+  path = "/app/*"
+
+[[edge_functions]]
+  function = "cannabis-geofence"
+  path = "/app/pos/*"
+
+# Cannabis business compliance redirects
+[[redirects]]
+  from = "/verify-age"
+  to = "/auth/age-verification"
+  status = 302
+
+[[redirects]]
+  from = "/compliance/*"
+  to = "/app/compliance/:splat"
+  status = 301
+
+# METRC integration endpoints
+[[redirects]]
+  from = "/metrc/sync"
+  to = "/.netlify/functions/metrc-sync"
+  status = 200
+
+[[redirects]]
+  from = "/metrc/webhook"
+  to = "/.netlify/functions/metrc-webhook"
+  status = 200
+
+# Cannabis inventory tracking
+[[redirects]]
+  from = "/api/inventory/track"
+  to = "/.netlify/functions/inventory-tracking"
+  status = 200
+
+# Point of sale integration
+[[redirects]]
+  from = "/api/pos/process"
+  to = "/.netlify/functions/pos-transaction"
+  status = 200
+
+# Age verification service
+[[redirects]]
+  from = "/api/verify-age"
+  to = "/.netlify/functions/age-verification"
+  status = 200
+
+# Cannabis compliance reporting
+[[redirects]]
+  from = "/api/compliance/report"
+  to = "/.netlify/functions/compliance-report"
+  status = 200
+
+# File upload handling for cannabis compliance documents
+[[redirects]]
+  from = "/api/upload/*"
+  to = "/.netlify/functions/file-upload"
+  status = 200
+
+# Payment processing for cannabis sales
+[[redirects]]
+  from = "/api/payments/*"
+  to = "/.netlify/functions/payment-processing"
+  status = 200
+
+# Environment-specific settings
+[context.production.environment]
+  NODE_ENV = "production"
+  NEXT_PUBLIC_ENVIRONMENT = "production"
+
+[context.deploy-preview.environment]
+  NODE_ENV = "development"
+  NEXT_PUBLIC_ENVIRONMENT = "preview"
+
+[context.branch-deploy.environment]
+  NODE_ENV = "development"
+  NEXT_PUBLIC_ENVIRONMENT = "development"
