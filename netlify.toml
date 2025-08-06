@@ -1,0 +1,212 @@
+# CultivateCo Cannabis Marketing Website - Netlify Configuration
+[build]
+  publish = "out"
+  command = "npm run build"
+  
+[build.environment]
+  NODE_VERSION = "18"
+  NPM_VERSION = "8"
+  NEXT_TELEMETRY_DISABLED = "1"
+
+# Cannabis industry performance optimizations
+[build.processing]
+  skip_processing = false
+
+[build.processing.css]
+  bundle = true
+  minify = true
+
+[build.processing.js]
+  bundle = true
+  minify = true
+
+[build.processing.html]
+  pretty_urls = true
+
+[build.processing.images]
+  compress = true
+
+# Cannabis marketing website redirects and rewrites
+[[redirects]]
+  from = "/dispensary-software"
+  to = "/platform"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/cannabis-compliance"
+  to = "/compliance"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/metrc-integration"
+  to = "/integrations"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/pos-system"
+  to = "/platform"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/cannabis-pos"
+  to = "/platform"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/dispensary-management"
+  to = "/platform"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/cannabis-analytics"
+  to = "/platform"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/seed-to-sale"
+  to = "/compliance"
+  status = 301
+  force = true
+
+# Cannabis governance map API proxying for CORS
+[[redirects]]
+  from = "/api/cannabis/*"
+  to = "https://api.cultivateco.com/cannabis/:splat"
+  status = 200
+  force = false
+
+[[redirects]]
+  from = "/api/compliance/*"
+  to = "https://compliance.cultivateco.com/:splat"
+  status = 200
+  force = false
+
+[[redirects]]
+  from = "/api/metrc/*"
+  to = "https://api.cultivateco.com/metrc/:splat"
+  status = 200
+  force = false
+
+# Interactive map assets and tiles
+[[redirects]]
+  from = "/map-tiles/*"
+  to = "https://api.mapbox.com/styles/v1/:splat"
+  status = 200
+  force = false
+
+# Cannabis industry security headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+
+# Cannabis compliance API caching
+[[headers]]
+  for = "/api/cannabis/*"
+  [headers.values]
+    Cache-Control = "public, s-maxage=300, stale-while-revalidate=600"
+
+# Cannabis marketing static assets caching
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Cannabis governance map specific headers
+[[headers]]
+  for = "/governance-map"
+  [headers.values]
+    Cache-Control = "public, s-maxage=1800, stale-while-revalidate=3600"
+
+# Cannabis blog and resources caching
+[[headers]]
+  for = "/resources/*"
+  [headers.values]
+    Cache-Control = "public, s-maxage=3600, stale-while-revalidate=7200"
+
+# Form submissions for cannabis leads
+[[forms]]
+  name = "cannabis-contact"
+
+[[forms]]
+  name = "cannabis-demo-request"
+
+[[forms]]
+  name = "cannabis-consultation"
+
+# Environment variables for cannabis features
+[context.production.environment]
+  CANNABIS_ANALYTICS_ENABLED = "true"
+  MAPBOX_STYLE = "mapbox://styles/cultivateco/cannabis-governance"
+  CANNABIS_COMPLIANCE_ALERTS = "true"
+
+[context.deploy-preview.environment]
+  CANNABIS_ANALYTICS_ENABLED = "false"
+  MAPBOX_STYLE = "mapbox://styles/mapbox/light-v11"
+  CANNABIS_COMPLIANCE_ALERTS = "false"
+
+# Functions for cannabis lead processing
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "nft"
+
+# Plugin configuration for cannabis marketing optimization
+[[plugins]]
+  package = "@netlify/plugin-sitemap"
+  [plugins.inputs]
+    buildDir = "out"
+    exclude = [
+      "/admin/**",
+      "/api/**",
+      "/**/private/**"
+    ]
+
+[[plugins]]
+  package = "netlify-plugin-submit-sitemap"
+  [plugins.inputs]
+    baseUrl = "https://cultivateco.com"
+    sitemapPath = "/sitemap.xml"
+    providers = [
+      "google",
+      "bing",
+      "yandex"
+    ]
+
+# Edge functions for cannabis compliance geolocation
+[[edge_functions]]
+  function = "cannabis-geolocation"
+  path = "/api/location"
+
+[[edge_functions]]
+  function = "cannabis-compliance-check"
+  path = "/api/compliance-status"
+
+# Development context for cannabis testing
+[context.branch-deploy]
+  command = "npm run build"
+  
+[context.branch-deploy.environment]
+  CANNABIS_DEBUG_MODE = "true"
+  MAPBOX_STYLE = "mapbox://styles/mapbox/streets-v12"
