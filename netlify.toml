@@ -1,7 +1,7 @@
 # Netlify configuration for CultivateCo Cannabis Business Management Platform
 [build]
   # Build command for Next.js static export
-  command = "npm run build"
+  command = "npm run build:export"
   
   # Directory to publish (Next.js static export output)
   publish = "out"
@@ -35,7 +35,6 @@
   from = "/*"
   to = "/index.html"
   status = 200
-  conditions = {Role = ["public"]}
 
 # Authentication redirects
 [[redirects]]
@@ -56,7 +55,6 @@
   to = "https://api-ca.metrc.com/:splat"
   status = 200
   force = true
-  headers = {Authorization = "Basic your-metrc-auth-token"}
 
 # Static asset caching
 [[headers]]
@@ -85,7 +83,7 @@
     Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=(self)"
     
     # Cannabis business specific headers
-    X-Robots-Tag = "noindex, nofollow"  # Keep cannabis business private
+    X-Robots-Tag = "noindex, nofollow"
     X-Cannabis-Compliance = "metrc-integrated"
 
 # Forms handling for contact and support
@@ -109,51 +107,6 @@
   from = "/500"
   to = "/500.html"
   status = 500
-
-# Prerender configuration for better SEO and loading
-[[plugins]]
-package = "@netlify/plugin-nextjs"
-
-  [plugins.inputs]
-    # Enable Next.js features
-    target = "serverless"
-    
-    # Cannabis business specific optimizations
-    distDir = "out"
-    
-    # Enable image optimization
-    images = { domains = ["cultivateco.com", "images.unsplash.com"], formats = ["webp", "avif"] }
-
-# Branch deploy settings
-[context.production]
-  command = "npm run build && npm run export"
-  
-[context.deploy-preview]
-  command = "npm run build"
-  
-[context.branch-deploy]
-  command = "npm run build"
-
-# Development context
-[context.dev]
-  command = "npm run dev"
-  port = 3000
-  targetPort = 3000
-  publish = "out"
-
-# Functions configuration for serverless API
-[functions]
-  directory = ".netlify/functions/"
-  node_bundler = "nft"
-
-# Edge functions for cannabis compliance checking
-[[edge_functions]]
-  function = "cannabis-age-verification"
-  path = "/app/*"
-
-[[edge_functions]]
-  function = "cannabis-geofence"
-  path = "/app/pos/*"
 
 # Cannabis business compliance redirects
 [[redirects]]
@@ -212,6 +165,11 @@ package = "@netlify/plugin-nextjs"
   from = "/api/payments/*"
   to = "/.netlify/functions/payment-processing"
   status = 200
+
+# Functions configuration for serverless API
+[functions]
+  directory = ".netlify/functions/"
+  node_bundler = "nft"
 
 # Environment-specific settings
 [context.production.environment]
