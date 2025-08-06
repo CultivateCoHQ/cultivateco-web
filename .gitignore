@@ -1,0 +1,265 @@
+# =============================================================================
+# CultivateCo Cannabis Marketing Website - Git Ignore
+# =============================================================================
+
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Next.js build output
+.next/
+out/
+dist/
+build/
+
+# Production builds
+*.tsbuildinfo
+next-env.d.ts
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# nyc test coverage
+.nyc_output
+
+# node-waf configuration
+.lock-wscript
+
+# Compiled binary addons
+build/Release
+
+# Dependency directories
+jspm_packages/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.development.local
+.env.test
+.env.test.local
+.env.production
+.env.production.local
+
+# Cannabis API keys and sensitive data
+.env.cannabis
+.env.metrc
+.env.compliance
+cannabis-keys.json
+metrc-credentials.json
+compliance-tokens.json
+
+# Vercel deployment
+.vercel
+
+# Netlify deployment
+.netlify/
+netlify-local/
+
+# Storybook build outputs
+storybook-static/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+logs
+*.log
+
+# Temporary folders
+tmp/
+temp/
+
+# Cannabis development files
+cannabis-dev-notes.md
+compliance-testing/
+metrc-sandbox/
+governance-prototype/
+
+# Bundle analyzer
+.analyze/
+
+# PWA files
+**/public/sw.js
+**/public/workbox-*.js
+**/public/worker-*.js
+**/public/fallback-*.js
+
+# Sentry Config File
+.sentryclirc
+
+# Local development
+.local
+
+# Testing
+/coverage
+/.nyc_output
+
+# Turbo
+.turbo
+
+# Cannabis map and data cache
+map-cache/
+compliance-cache/
+governance-data-cache/
+metrc-sync-cache/
+
+# Cannabis analytics and tracking
+analytics-cache/
+hotjar-cache/
+gtm-cache/
+
+# Cannabis lead and form data
+leads-backup/
+form-submissions/
+contact-data/
+
+# Cannabis content and assets backup
+content-backup/
+asset-backup/
+image-optimization-cache/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# CSS output
+*.css.map
+
+# Webpack
+webpack-stats.json
+
+# Bundle stats
+bundle-stats.json
+
+# Build artifacts
+public/build/
+static/build/
+
+# Lock files (choose one based on package manager)
+# yarn.lock
+# package-lock.json
+# pnpm-lock.yaml
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Cannabis compliance documentation drafts
+compliance-drafts/
+regulatory-notes/
+legal-review/
+
+# Cannabis marketing assets working files
+marketing-assets-wip/
+brand-assets-draft/
+campaign-materials-draft/
+
+# Cannabis analytics and reporting
+analytics-reports/
+compliance-reports/
+governance-reports/
+metrc-reports/
+
+# Local environment
+.local-env
+local-config.json
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# System files
+*.tmp
+*.temp
+
+# Cannabis development utilities
+dev-utils/
+test-data/
+mock-data/
+prototype-data/
+
+# Third-party service configs (with sensitive data)
+mapbox-config.local.json
+hubspot-config.local.json
+sendgrid-config.local.json
+twilio-config.local.json
+
+# Cannabis industry specific
+cannabis-license-docs/
+metrc-integration-logs/
+compliance-audit-files/
+regulatory-correspondence/
+
+# Performance monitoring
+lighthouse-reports/
+performance-logs/
+analytics-dumps/
+
+# Security scanning
+security-reports/
+vulnerability-scans/
+
+# Local development servers
+*.pid
+server.log
+
+# Build logs
+build.log
+deploy.log
