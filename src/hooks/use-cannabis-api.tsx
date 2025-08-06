@@ -1,896 +1,274 @@
 'use client'
 
-import { 
-  useQuery, 
-  useMutation, 
-  useQueryClient,
-  UseQueryOptions,
-  UseMutationOptions
-} from '@tanstack/react-query'
-import { toast } from 'react-hot-toast'
-import { cannabisApi, CannabisApiResponse, CannabisPaginatedResponse, handleCannabisApiError } from '@/services/cannabis-api'
-import { cannabisQueryKeys, cannabisQueryUtils } from '@/providers/query-provider'
-
-/**
- * =============================================================================
- * CultivateCo Cannabis API Hooks
- * =============================================================================
- * React Query hooks for cannabis business operations and compliance
- */
-
-// ============================================================================
-// CANNABIS AUTHENTICATION HOOKS
-// ============================================================================
-
-/**
- * Cannabis user profile hook
- */
-export function useCannabisUserProfile() {
-  return useQuery({
-    queryKey: cannabisQueryKeys.auth.user(),
-    queryFn: async () => {
-      const response = await cannabisApi.getUserProfile()
-      return response.data
-    },
-    staleTime: 1000 * 60 * 5, // 5 minutes
-    retry: false, // Don't retry auth failures
-  })
-}
-
-/**
- * Cannabis user profile update mutation
- */
-export function useCannabisUpdateProfile() {
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: async (userData: any) => {
-      const response = await cannabisApi.updateUserProfile(userData)
-      return response.data
-    },
-    onSuccess: (data) => {
-      // Update cached user data
-      queryClient.setQueryData(cannabisQueryKeys.auth.user(), data)
-      toast.success('Cannabis profile updated successfully')
-    },
-    onError: (error: any) => {
-      handleCannabisApiError(error, true)
-    },
-  })
-}
-
-// ============================================================================
-// CANNABIS COMPLIANCE HOOKS
-// ============================================================================
-
-/**
- * Cannabis compliance status hook
- */
-export function useCannabisComplianceStatus(facilityId?: string) {
-  return useQuery({
-    queryKey: cannabisQueryKeys.compliance.status(),
-    queryFn: async () => {
-      const response = await cannabisApi.getComplianceStatus(facilityId)
-      return response.data
-    },
-    staleTime: 1000 * 60 * 1, // 1 minute for compliance
-    refetchInterval: 1000 * 60 * 2, // Refetch every 2 minutes
-    refetchIntervalInBackground: true,
-  })
-}
-
-/**
- * Cannabis compliance violations hook
- */
-export function useCannabisComplianceViolations(params?: {
-  page?: number
-  limit?: number
-  status?: string
-  severity?: string
-}) {
-  return useQuery({
-    queryKey: [...cannabisQueryKeys.compliance.violations(), params],
-    queryFn: async () => {
-      const response = await cannabisApi.getComplianceViolations(params)
-      return response
-    },
-    staleTime: 1000 * 60 * 2, // 2 minutes
-  })
-}
-
-/**
- * Cannabis violation resolution mutation
- */
-export function useCannabisResolveViolation() {
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: async ({ violationId, resolution }: {
-      violationId: string
-      resolution: { notes: string; action: string }
-    }) => {
-      const response = await cannabisApi.resolveViolation(violationId, resolution)
-      return response.data
-    },
-    onSuccess: () => {
-      // Invalidate compliance queries
-      cannabisQueryUtils.invalidateCompliance(queryClient)
-      toast.success('Cannabis violation resolved successfully')
-    },
-    onError: (error: any) => {
-      handleCannabisApiError(error, true)
-    },
-  })
-}
-
-/**
- * Cannabis compliance report generation mutation
- */
-export function useCannabisGenerateComplianceReport() {
-  return useMutation({
-    mutationFn: async (params: {
-      type: string
-      dateRange: { start: string; end: string }
-      format?: 'pdf' | 'csv' | 'json'
-    }) => {
-      const response = await cannabisApi.generateComplianceReport(params)
-      return response.data
-    },
-    onSuccess: () => {
-      toast.success('Cannabis compliance report generated successfully')
-    },
-    onError: (error: any) => {
-      handleCannabisApiError(error, true)
-    },
-  })
-}
-
-// ============================================================================
-// CANNABIS PRODUCT HOOKS
-// ============================================================================
-
-/**
- * Cannabis products hook
- */
-export function useCannabisProducts(params?: {
-  page?: number
-  limit?: number
-  category?: string
-  search?: string
-  lowStock?: boolean
-}) {
-  return useQuery({
-    queryKey: cannabisQueryKeys.products.list(params || {}),
-    queryFn: async () => {
-      const response = await cannabisApi.getProducts(params)
-      return response
-    },
-    staleTime: 1000 * 60 * 3, // 3 minutes
-  })
-}
-
-/**
- * Cannabis product detail hook
- */
-export function useCannabisProduct(productId: string, enabled: boolean = true) {
-  return useQuery({
-    queryKey: cannabisQueryKeys.products.detail(productId),
-    queryFn: async () => {
-      const response = await cannabisApi.getProduct(productId)
-      return response.data
-    },
-    enabled: enabled && !!productId,
-    staleTime: 1000 * 60 * 5, // 5 minutes
-  })
-}
-
-/**
- * Cannabis product creation mutation
- */
-export function useCannabisCreateProduct() {
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: async (productData: any) => {
-      const response = await cannabisApi.createProduct(productData)
-      return response.data
-    },
-    onSuccess: () => {
-      // Invalidate products list
-      queryClient.invalidateQueries({ queryKey: cannabisQueryKeys.products.all() })
-      cannabisQueryUtils.invalidateInventory(queryClient)
-      toast.success('Cannabis product created successfully')
-    },
-    onError: (error: any) => {
-      handleCannabisApiError(error, true)
-    },
-  })
-}
-
-/**
- * Cannabis product update mutation
- */
-export function useCannabisUpdateProduct() {
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: async ({ productId, productData }: {
-      productId: string
-      productData: any
-    }) => {
-      const response = await cannabisApi.updateProduct(productId, productData)
-      return response.data
-    },
-    onSuccess: (data, variables) => {
-      // Update cached product data
-      queryClient.setQueryData(cannabisQueryKeys.products.detail(variables.productId), data)
-      queryClient.invalidateQueries({ queryKey: cannabisQueryKeys.products.all() })
-      toast.success('Cannabis product updated successfully')
-    },
-    onError: (error: any) => {
-      handleCannabisApiError(error, true)
-    },
-  })
-}
-
-/**
- * Cannabis product deletion mutation
- */
-export function useCannabisDeleteProduct() {
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: async (productId: string) => {
-      const response = await cannabisApi.deleteProduct(productId)
-      return response.data
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: cannabisQueryKeys.products.all() })
-      cannabisQueryUtils.invalidateInventory(queryClient)
-      toast.success('Cannabis product deleted successfully')
-    },
-    onError: (error: any) => {
-      handleCannabisApiError(error, true)
-    },
-  })
-}
-
-// ============================================================================
-// CANNABIS INVENTORY HOOKS
-// ============================================================================
-
-/**
- * Cannabis inventory hook
- */
-export function useCannabisInventory(params?: {
-  page?: number
-  limit?: number
-  location?: string
-  lowStock?: boolean
-  expiring?: boolean
-}) {
-  return useQuery({
-    queryKey: cannabisQueryKeys.inventory.list(params || {}),
-    queryFn: async () => {
-      const response = await cannabisApi.getInventory(params)
-      return response
-    },
-    staleTime: 1000 * 60 * 2, // 2 minutes
-    refetchInterval: 1000 * 60 * 5, // Refetch every 5 minutes
-  })
-}
-
-/**
- * Cannabis inventory alerts hook
- */
-export function useCannabisInventoryAlerts() {
-  return useQuery({
-    queryKey: cannabisQueryKeys.inventory.alerts(),
-    queryFn: async () => {
-      const response = await cannabisApi.getInventoryAlerts()
-      return response.data
-    },
-    staleTime: 1000 * 30, // 30 seconds
-    refetchInterval: 1000 * 60, // Refetch every minute
-    refetchIntervalInBackground: true,
-  })
-}
-
-/**
- * Cannabis inventory update mutation
- */
-export function useCannabisUpdateInventory() {
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: async ({ inventoryId, updateData }: {
-      inventoryId: string
-      updateData: { quantity?: number; location?: string; notes?: string }
-    }) => {
-      const response = await cannabisApi.updateInventory(inventoryId, updateData)
-      return response.data
-    },
-    onSuccess: () => {
-      cannabisQueryUtils.invalidateInventory(queryClient)
-      cannabisQueryUtils.invalidateAnalytics(queryClient)
-      toast.success('Cannabis inventory updated successfully')
-    },
-    onError: (error: any) => {
-      handleCannabisApiError(error, true)
-    },
-  })
-}
-
-/**
- * Cannabis inventory receive mutation
- */
-export function useCannabisReceiveInventory() {
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: async (receiptData: {
-      productId: string
-      quantity: number
-      batchNumber: string
-      expirationDate?: string
-      cost: number
-      supplier: string
-      metrcPackageId?: string
-    }) => {
-      const response = await cannabisApi.receiveInventory(receiptData)
-      return response.data
-    },
-    onSuccess: () => {
-      cannabisQueryUtils.invalidateInventory(queryClient)
-      cannabisQueryUtils.invalidateAnalytics(queryClient)
-      cannabisQueryUtils.invalidateCompliance(queryClient)
-      toast.success('Cannabis inventory received successfully')
-    },
-    onError: (error: any) => {
-      handleCannabisApiError(error, true)
-    },
-  })
-}
-
-// ============================================================================
-// CANNABIS TRANSACTION HOOKS
-// ============================================================================
-
-/**
- * Cannabis transactions hook
- */
-export function useCannabisTransactions(params?: {
-  page?: number
-  limit?: number
-  dateRange?: { start: string; end: string }
-  customerId?: string
-  status?: string
-}) {
-  return useQuery({
-    queryKey: cannabisQueryKeys.transactions.list(params || {}),
-    queryFn: async () => {
-      const response = await cannabisApi.getTransactions(params)
-      return response
-    },
-    staleTime: 1000 * 60 * 2, // 2 minutes
-  })
-}
-
-/**
- * Cannabis recent transactions hook
- */
-export function useCannabisRecentTransactions(limit: number = 10) {
-  return useQuery({
-    queryKey: cannabisQueryKeys.transactions.recent(limit),
-    queryFn: async () => {
-      const response = await cannabisApi.getTransactions({ limit, page: 1 })
-      return response.data || []
-    },
-    staleTime: 1000 * 30, // 30 seconds
-    refetchInterval: 1000 * 60, // Refetch every minute
-  })
-}
-
-/**
- * Cannabis transaction detail hook
- */
-export function useCannabisTransaction(transactionId: string, enabled: boolean = true) {
-  return useQuery({
-    queryKey: cannabisQueryKeys.transactions.detail(transactionId),
-    queryFn: async () => {
-      const response = await cannabisApi.getTransaction(transactionId)
-      return response.data
-    },
-    enabled: enabled && !!transactionId,
-    staleTime: 1000 * 60 * 10, // 10 minutes
-  })
-}
-
-/**
- * Cannabis transaction creation mutation
- */
-export function useCannabisCreateTransaction() {
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: async (transactionData: {
-      customerId?: string
-      items: Array<{
-        productId: string
-        quantity: number
-        price: number
-      }>
-      payment: {
-        method: string
-        amount: number
-        tendered?: number
-      }
-      discounts?: Array<{
-        type: string
-        amount: number
-      }>
-    }) => {
-      const response = await cannabisApi.createTransaction(transactionData)
-      return response.data
-    },
-    onSuccess: () => {
-      cannabisQueryUtils.invalidateTransactions(queryClient)
-      cannabisQueryUtils.invalidateInventory(queryClient)
-      cannabisQueryUtils.invalidateAnalytics(queryClient)
-      cannabisQueryUtils.invalidateCompliance(queryClient)
-      toast.success('Cannabis transaction completed successfully')
-    },
-    onError: (error: any) => {
-      handleCannabisApiError(error, true)
-    },
-  })
-}
-
-/**
- * Cannabis transaction void mutation
- */
-export function useCannabisVoidTransaction() {
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: async ({ transactionId, reason }: {
-      transactionId: string
-      reason: string
-    }) => {
-      const response = await cannabisApi.voidTransaction(transactionId, reason)
-      return response.data
-    },
-    onSuccess: () => {
-      cannabisQueryUtils.invalidateTransactions(queryClient)
-      cannabisQueryUtils.invalidateInventory(queryClient)
-      cannabisQueryUtils.invalidateAnalytics(queryClient)
-      toast.success('Cannabis transaction voided successfully')
-    },
-    onError: (error: any) => {
-      handleCannabisApiError(error, true)
-    },
-  })
-}
-
-/**
- * Cannabis transaction refund mutation
- */
-export function useCannabisRefundTransaction() {
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: async ({ transactionId, refundData }: {
-      transactionId: string
-      refundData: {
-        amount: number
-        reason: string
-        items?: Array<{
-          transactionItemId: string
-          quantity: number
-        }>
-      }
-    }) => {
-      const response = await cannabisApi.refundTransaction(transactionId, refundData)
-      return response.data
-    },
-    onSuccess: () => {
-      cannabisQueryUtils.invalidateTransactions(queryClient)
-      cannabisQueryUtils.invalidateInventory(queryClient)
-      cannabisQueryUtils.invalidateAnalytics(queryClient)
-      toast.success('Cannabis transaction refunded successfully')
-    },
-    onError: (error: any) => {
-      handleCannabisApiError(error, true)
-    },
-  })
-}
-
-// ============================================================================
-// CANNABIS CUSTOMER HOOKS
-// ============================================================================
-
-/**
- * Cannabis customers hook
- */
-export function useCannabisCustomers(params?: {
-  page?: number
-  limit?: number
-  search?: string
-  type?: string
-}) {
-  return useQuery({
-    queryKey: cannabisQueryKeys.customers.list(params || {}),
-    queryFn: async () => {
-      const response = await cannabisApi.getCustomers(params)
-      return response
-    },
-    staleTime: 1000 * 60 * 5, // 5 minutes
-  })
-}
-
-/**
- * Cannabis customer detail hook
- */
-export function useCannabisCustomer(customerId: string, enabled: boolean = true) {
-  return useQuery({
-    queryKey: cannabisQueryKeys.customers.detail(customerId),
-    queryFn: async () => {
-      const response = await cannabisApi.getCustomer(customerId)
-      return response.data
-    },
-    enabled: enabled && !!customerId,
-    staleTime: 1000 * 60 * 5, // 5 minutes
-  })
-}
-
-/**
- * Cannabis customer creation mutation
- */
-export function useCannabisCreateCustomer() {
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: async (customerData: {
-      firstName?: string
-      lastName?: string
-      email?: string
-      phone?: string
-      dateOfBirth: string
-      identification: {
-        type: string
-        number: string
-        issuingState: string
-        expirationDate: string
-      }
-      medicalCard?: {
-        number: string
-        expirationDate: string
-        issuingState: string
-      }
-    }) => {
-      const response = await cannabisApi.createCustomer(customerData)
-      return response.data
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: cannabisQueryKeys.customers.all() })
-      toast.success('Cannabis customer created successfully')
-    },
-    onError: (error: any) => {
-      handleCannabisApiError(error, true)
-    },
-  })
-}
-
-/**
- * Cannabis customer verification mutation
- */
-export function useCannabisVerifyCustomer() {
-  return useMutation({
-    mutationFn: async (customerData: {
-      identification: {
-        type: string
-        number: string
-        expirationDate: string
-      }
-      dateOfBirth: string
-    }) => {
-      const response = await cannabisApi.verifyCustomer(customerData)
-      return response.data
-    },
-    onError: (error: any) => {
-      handleCannabisApiError(error, true)
-    },
-  })
-}
-
-/**
- * Cannabis customer purchase history hook
- */
-export function useCannabisCustomerPurchaseHistory(
-  customerId: string,
-  params?: {
-    page?: number
-    limit?: number
-    dateRange?: { start: string; end: string }
-  },
-  enabled: boolean = true
-) {
-  return useQuery({
-    queryKey: cannabisQueryKeys.customers.history(customerId),
-    queryFn: async () => {
-      const response = await cannabisApi.getCustomerPurchaseHistory(customerId, params)
-      return response
-    },
-    enabled: enabled && !!customerId,
-    staleTime: 1000 * 60 * 5, // 5 minutes
-  })
-}
-
-// ============================================================================
-// CANNABIS METRC HOOKS
-// ============================================================================
-
-/**
- * Cannabis METRC sync status hook
- */
-export function useCannabisMetrcSyncStatus() {
-  return useQuery({
-    queryKey: cannabisQueryKeys.metrc.status(),
-    queryFn: async () => {
-      const response = await cannabisApi.getMetrcSyncStatus()
-      return response.data
-    },
-    staleTime: 1000 * 30, // 30 seconds
-    refetchInterval: 1000 * 60, // Refetch every minute
-    refetchIntervalInBackground: true,
-  })
-}
-
-/**
- * Cannabis METRC sync trigger mutation
- */
-export function useCannabisTriggerMetrcSync() {
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: async () => {
-      const response = await cannabisApi.triggerMetrcSync()
-      return response.data
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: cannabisQueryKeys.metrc.all() })
-      cannabisQueryUtils.invalidateCompliance(queryClient)
-      toast.success('Cannabis METRC sync initiated successfully')
-    },
-    onError: (error: any) => {
-      handleCannabisApiError(error, true)
-    },
-  })
-}
-
-/**
- * Cannabis METRC packages hook
- */
-export function useCannabisMetrcPackages(params?: {
-  page?: number
-  limit?: number
-  status?: string
-}) {
-  return useQuery({
-    queryKey: cannabisQueryKeys.metrc.packages(params || {}),
-    queryFn: async () => {
-      const response = await cannabisApi.getMetrcPackages(params)
-      return response
-    },
-    staleTime: 1000 * 60 * 2, // 2 minutes
-  })
-}
-
-// ============================================================================
-// CANNABIS ANALYTICS HOOKS
-// ============================================================================
-
-/**
- * Cannabis dashboard analytics hook
- */
-export function useCannabisDashboardAnalytics(dateRange: string = '7d') {
-  return useQuery({
-    queryKey: cannabisQueryKeys.analytics.dashboard(dateRange),
-    queryFn: async () => {
-      const response = await cannabisApi.getDashboardAnalytics(dateRange)
-      return response.data
-    },
-    staleTime: 1000 * 60 * 2, // 2 minutes
-    refetchInterval: 1000 * 60 * 5, // Refetch every 5 minutes
-  })
-}
-
-/**
- * Cannabis sales analytics hook
- */
-export function useCannabisSalesAnalytics(params: {
-  dateRange: { start: string; end: string }
-  groupBy?: 'day' | 'week' | 'month'
-  category?: string
-}) {
-  return useQuery({
-    queryKey: cannabisQueryKeys.analytics.sales(params.dateRange.start + '-' + params.dateRange.end),
-    queryFn: async () => {
-      const response = await cannabisApi.getSalesAnalytics(params)
-      return response.data
-    },
-    staleTime: 1000 * 60 * 5, // 5 minutes
-  })
-}
-
-/**
- * Cannabis inventory analytics hook
- */
-export function useCannabisInventoryAnalytics(params?: {
-  dateRange?: { start: string; end: string }
-  category?: string
-}) {
-  return useQuery({
-    queryKey: cannabisQueryKeys.analytics.inventory(params?.dateRange?.start + '-' + params?.dateRange?.end || 'all'),
-    queryFn: async () => {
-      const response = await cannabisApi.getInventoryAnalytics(params)
-      return response.data
-    },
-    staleTime: 1000 * 60 * 5, // 5 minutes
-  })
-}
-
-// ============================================================================
-// CANNABIS SETTINGS HOOKS
-// ============================================================================
-
-/**
- * Cannabis facility settings hook
- */
-export function useCannabisFacilitySettings() {
-  return useQuery({
-    queryKey: cannabisQueryKeys.settings.facility(),
-    queryFn: async () => {
-      const response = await cannabisApi.getFacilitySettings()
-      return response.data
-    },
-    staleTime: 1000 * 60 * 10, // 10 minutes
-  })
-}
-
-/**
- * Cannabis facility settings update mutation
- */
-export function useCannabisUpdateFacilitySettings() {
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: async (settings: any) => {
-      const response = await cannabisApi.updateFacilitySettings(settings)
-      return response.data
-    },
-    onSuccess: (data) => {
-      queryClient.setQueryData(cannabisQueryKeys.settings.facility(), data)
-      toast.success('Cannabis facility settings updated successfully')
-    },
-    onError: (error: any) => {
-      handleCannabisApiError(error, true)
-    },
-  })
-}
-
-/**
- * Cannabis POS settings hook
- */
-export function useCannabisPosSettings() {
-  return useQuery({
-    queryKey: cannabisQueryKeys.settings.pos(),
-    queryFn: async () => {
-      const response = await cannabisApi.getPosSettings()
-      return response.data
-    },
-    staleTime: 1000 * 60 * 10, // 10 minutes
-  })
-}
-
-// ============================================================================
-// CANNABIS FILE UPLOAD HOOKS
-// ============================================================================
-
-/**
- * Cannabis file upload mutation
- */
-export function useCannabisFileUpload() {
-  return useMutation({
-    mutationFn: async ({ file, type }: {
-      file: File
-      type: 'product-image' | 'license-document' | 'lab-result' | 'other'
-    }) => {
-      const response = await cannabisApi.uploadFile(file, type)
-      return response.data
-    },
-    onSuccess: () => {
-      toast.success('Cannabis file uploaded successfully')
-    },
-    onError: (error: any) => {
-      handleCannabisApiError(error, true)
-    },
-  })
-}
-
-// ============================================================================
-// CANNABIS HEALTH CHECK HOOKS
-// ============================================================================
-
-/**
- * Cannabis API health check hook
- */
-export function useCannabisHealthCheck() {
-  return useQuery({
-    queryKey: ['cannabis', 'health'],
-    queryFn: async () => {
-      const response = await cannabisApi.healthCheck()
-      return response.data
-    },
-    staleTime: 1000 * 30, // 30 seconds
-    refetchInterval: 1000 * 60, // Check every minute
-    retry: 1,
-  })
-}
-
-// ============================================================================
-// CANNABIS UTILITY HOOKS
-// ============================================================================
-
-/**
- * Cannabis optimistic update utility hook
- */
-export function useCannabisOptimisticUpdate<T>(
-  queryKey: any[],
-  updateFn: (oldData: T, newData: any) => T
-) {
-  const queryClient = useQueryClient()
-
-  return {
-    optimisticUpdate: (newData: any) => {
-      queryClient.setQueryData(queryKey, (oldData: T) => {
-        if (!oldData) return oldData
-        return updateFn(oldData, newData)
-      })
-    },
-    rollback: () => {
-      queryClient.invalidateQueries({ queryKey })
-    }
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+
+// Mock data and API functions for development
+const mockData = {
+  products: [],
+  customers: [],
+  orders: [],
+  staff: [],
+  vendors: [],
+  inventory: [],
+  businessMetrics: {
+    today: { sales: 12450, orders: 45, customers: 23, avgOrderValue: 276.67 },
+    week: { sales: 87150, salesGrowth: 12.5, orders: 315, ordersGrowth: 8.3, newCustomers: 89, customersGrowth: 15.2 },
+    month: { sales: 342800, salesGrowth: 18.7, orders: 1240, ordersGrowth: 14.1, customers: 456, customersGrowth: 22.1 },
+    inventory: { totalValue: 125000, lowStockItems: 12, expiringItems: 3, turnoverRate: 4.2 },
+    compliance: { score: 94, violations: 0, expiringLicenses: 1, metrcSyncStatus: 'synced' as const },
+    staff: { activeToday: 8, totalStaff: 12, avgPerformance: 92, trainingAlerts: 2 }
   }
 }
 
-/**
- * Cannabis prefetch utility hook
- */
-export function useCannabisPrefetch() {
-  const queryClient = useQueryClient()
+// Products
+export const useCannabisProducts = (params?: any) => {
+  return useQuery({
+    queryKey: ['cannabis-products', params],
+    queryFn: async () => ({ data: mockData.products }),
+  })
+}
 
-  return {
-    prefetchDashboard: (dateRange: string = '7d') => {
-      cannabisQueryUtils.prefetchDashboard(queryClient, dateRange)
-    },
-    prefetchProduct: (productId: string) => {
-      queryClient.prefetchQuery({
-        queryKey: cannabisQueryKeys.products.detail(productId),
-        queryFn: async () => {
-          const response = await cannabisApi.getProduct(productId)
-          return response.data
-        },
-      })
-    },
-    prefetchCustomer: (customerId: string) => {
-      queryClient.prefetchQuery({
-        queryKey: cannabisQueryKeys.customers.detail(customerId),
-        queryFn: async () => {
-          const response = await cannabisApi.getCustomer(customerId)
-          return response.data
-        },
-      })
-    }
-  }
+export const useCannabisCreateProduct = () => {
+  return useMutation({
+    mutationFn: async (productData: any) => productData,
+  })
+}
+
+export const useCannabisUpdateProduct = () => {
+  return useMutation({
+    mutationFn: async ({ productId, productData }: any) => ({ productId, productData }),
+  })
+}
+
+export const useCannabisDeleteProduct = () => {
+  return useMutation({
+    mutationFn: async (productId: string) => productId,
+  })
+}
+
+// Customers
+export const useCannabisCustomers = (params?: any) => {
+  return useQuery({
+    queryKey: ['cannabis-customers', params],
+    queryFn: async () => ({ data: mockData.customers }),
+  })
+}
+
+export const useCannabisCreateCustomer = () => {
+  return useMutation({
+    mutationFn: async (customerData: any) => customerData,
+  })
+}
+
+export const useCannabisUpdateCustomer = () => {
+  return useMutation({
+    mutationFn: async ({ customerId, customerData }: any) => ({ customerId, customerData }),
+  })
+}
+
+export const useCannabisDeleteCustomer = () => {
+  return useMutation({
+    mutationFn: async (customerId: string) => customerId,
+  })
+}
+
+// Orders
+export const useCannabisOrders = (params?: any) => {
+  return useQuery({
+    queryKey: ['cannabis-orders', params],
+    queryFn: async () => ({ data: mockData.orders }),
+  })
+}
+
+export const useCannabisCreateOrder = () => {
+  return useMutation({
+    mutationFn: async (orderData: any) => orderData,
+  })
+}
+
+export const useCannabisUpdateOrder = () => {
+  return useMutation({
+    mutationFn: async ({ orderId, orderData }: any) => ({ orderId, orderData }),
+  })
+}
+
+export const useCannabisDeleteOrder = () => {
+  return useMutation({
+    mutationFn: async (orderId: string) => orderId,
+  })
+}
+
+export const useCannabisOrderItems = (params?: any) => {
+  return useQuery({
+    queryKey: ['cannabis-order-items', params],
+    queryFn: async () => ({ data: [] }),
+  })
+}
+
+// Staff
+export const useCannabisStaff = (params?: any) => {
+  return useQuery({
+    queryKey: ['cannabis-staff', params],
+    queryFn: async () => ({ data: mockData.staff }),
+  })
+}
+
+export const useCannabisCreateStaff = () => {
+  return useMutation({
+    mutationFn: async (staffData: any) => staffData,
+  })
+}
+
+export const useCannabisUpdateStaff = () => {
+  return useMutation({
+    mutationFn: async ({ staffId, staffData }: any) => ({ staffId, staffData }),
+  })
+}
+
+export const useCannabisDeleteStaff = () => {
+  return useMutation({
+    mutationFn: async (staffId: string) => staffId,
+  })
+}
+
+export const useCannabisStaffMetrics = () => {
+  return useQuery({
+    queryKey: ['cannabis-staff-metrics'],
+    queryFn: async () => ({ data: {} }),
+  })
+}
+
+export const useCannabisRoles = () => {
+  return useQuery({
+    queryKey: ['cannabis-roles'],
+    queryFn: async () => ({ data: [] }),
+  })
+}
+
+// Vendors
+export const useCannabisVendors = (params?: any) => {
+  return useQuery({
+    queryKey: ['cannabis-vendors', params],
+    queryFn: async () => ({ data: mockData.vendors }),
+  })
+}
+
+export const useCannabisCreateVendor = () => {
+  return useMutation({
+    mutationFn: async (vendorData: any) => vendorData,
+  })
+}
+
+export const useCannabisUpdateVendor = () => {
+  return useMutation({
+    mutationFn: async ({ vendorId, vendorData }: any) => ({ vendorId, vendorData }),
+  })
+}
+
+export const useCannabisDeleteVendor = () => {
+  return useMutation({
+    mutationFn: async (vendorId: string) => vendorId,
+  })
+}
+
+export const useCannabisVendorMetrics = () => {
+  return useQuery({
+    queryKey: ['cannabis-vendor-metrics'],
+    queryFn: async () => ({ data: {} }),
+  })
+}
+
+export const useCannabisVendorProducts = (params?: any) => {
+  return useQuery({
+    queryKey: ['cannabis-vendor-products', params],
+    queryFn: async () => ({ data: [] }),
+  })
+}
+
+export const useCannabisVendorOrders = (params?: any) => {
+  return useQuery({
+    queryKey: ['cannabis-vendor-orders', params],
+    queryFn: async () => ({ data: [] }),
+  })
+}
+
+// Inventory
+export const useCannabisInventory = (params?: any) => {
+  return useQuery({
+    queryKey: ['cannabis-inventory', params],
+    queryFn: async () => ({ data: mockData.inventory }),
+  })
+}
+
+export const useCannabisInventoryAlerts = () => {
+  return useQuery({
+    queryKey: ['cannabis-inventory-alerts'],
+    queryFn: async () => ({ data: [] }),
+  })
+}
+
+// Business Metrics & Dashboard
+export const useCannabisBusinessMetrics = (params?: any) => {
+  return useQuery({
+    queryKey: ['cannabis-business-metrics', params],
+    queryFn: async () => mockData.businessMetrics,
+  })
+}
+
+export const useCannabisRecentActivity = (params?: any) => {
+  return useQuery({
+    queryKey: ['cannabis-recent-activity', params],
+    queryFn: async () => ({ data: [] }),
+  })
+}
+
+export const useCannabisComplianceAlerts = () => {
+  return useQuery({
+    queryKey: ['cannabis-compliance-alerts'],
+    queryFn: async () => ({ data: [] }),
+  })
+}
+
+export const useCannabisStaffActivity = () => {
+  return useQuery({
+    queryKey: ['cannabis-staff-activity'],
+    queryFn: async () => ({ data: {} }),
+  })
+}
+
+export const useCannabisWeatherData = () => {
+  return useQuery({
+    queryKey: ['cannabis-weather-data'],
+    queryFn: async () => ({
+      current: {
+        temperature: 72,
+        humidity: 45,
+        conditions: 'Sunny',
+        icon: 'sun'
+      },
+      forecast: [],
+      alerts: []
+    }),
+  })
+}
+
+export const useCannabisNewsUpdates = (params?: any) => {
+  return useQuery({
+    queryKey: ['cannabis-news-updates', params],
+    queryFn: async () => ({ data: [] }),
+  })
+}
+
+export const useCannabisQuickStats = () => {
+  return useQuery({
+    queryKey: ['cannabis-quick-stats'],
+    queryFn: async () => ({ data: {} }),
+  })
+}
+
+// File Upload
+export const useCannabisFileUpload = () => {
+  return useMutation({
+    mutationFn: async (file: File) => ({ url: URL.createObjectURL(file) }),
+  })
 }
