@@ -1,27 +1,107 @@
 {
   "name": "cultivateco-web",
   "version": "1.0.0",
-  "description": "CultivateCo marketing website and interactive cannabis governance map",
   "private": true,
+  "description": "CultivateCo cannabis compliance platform marketing website",
+  "keywords": [
+    "cannabis",
+    "compliance",
+    "dispensary",
+    "METRC",
+    "cannabis-software",
+    "regulatory-compliance",
+    "cannabis-pos",
+    "cannabis-inventory",
+    "cannabis-tracking",
+    "cannabis-business"
+  ],
+  "author": "CultivateCo <hello@cultivateco.com>",
+  "license": "UNLICENSED",
+  "homepage": "https://cultivateco.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CultivateCoHQ/cultivateco-web.git"
+  },
+  "bugs": {
+    "url": "https://github.com/CultivateCoHQ/cultivateco-web/issues",
+    "email": "support@cultivateco.com"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "lint:fix": "next lint --fix",
     "type-check": "tsc --noEmit",
-    "analyze": "cross-env ANALYZE=true next build"
+    "export": "next export",
+    "build:export": "npm run build && npm run export",
+    "analyze": "cross-env ANALYZE=true next build",
+    "clean": "rm -rf .next out node_modules/.cache",
+    "prepare": "husky install"
   },
   "dependencies": {
     "next": "^14.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "typescript": "^5.2.0",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
-    "@types/node": "^20.8.0",
+    "framer-motion": "^10.16.0",
+    "lucide-react": "^0.294.0",
+    "clsx": "^2.0.0",
+    "tailwind-merge": "^2.0.0",
+    "@headlessui/react": "^1.7.17",
+    "@heroicons/react": "^2.0.18",
+    "react-hook-form": "^7.47.0",
+    "zod": "^3.22.4",
+    "@hookform/resolvers": "^3.3.2",
+    "react-hot-toast": "^2.4.1",
+    "date-fns": "^2.30.0",
+    "lodash": "^4.17.21",
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.37",
+    "@types/react-dom": "^18.2.15",
+    "@types/node": "^20.8.10",
+    "@types/lodash": "^4.14.202",
+    "typescript": "^5.2.2",
     "tailwindcss": "^3.3.5",
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.31",
-    "framer-motion": "^10.16.0",
-    "lucide-react": "^0.263.1",
-    "mapbox-gl": "^2
+    "eslint": "^8.53.0",
+    "eslint-config-next": "^14.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.10.0",
+    "@typescript-eslint/parser": "^6.10.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "prettier": "^3.0.3",
+    "prettier-plugin-tailwindcss": "^0.5.7",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.0.2",
+    "cross-env": "^7.0.3",
+    "@next/bundle-analyzer": "^14.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,css}": [
+      "prettier --write"
+    ]
+  }
+}
