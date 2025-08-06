@@ -1,22 +1,20 @@
-/**
- * =============================================================================
- * CultivateCo Cannabis Next.js App Component
- * =============================================================================
- * Global app wrapper with providers, analytics, and cannabis platform integration
- */
-
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import type { AppProps } from 'next/app'
-import { useRouter } from 'next/router'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
+import { AnimatePresence } from 'framer-motion'
 import Script from 'next/script'
 
-// Global CSS imports
+// Global styles and CSS
+import 'tailwindcss/tailwind.css'
 import '@/styles/globals.css'
-import '@/styles/cannabis-animations.css'
+import '@/styles/swiper-custom.css'
+import '@/styles/cannabis-theme.css'
 
-// Cannabis platform configuration
-import { CANNABIS_CONFIG, getEnvironmentConfig } from '@/config'
+// Configuration
+import { getEnvironmentConfig, CANNABIS_CONFIG } from '@/lib/config/cannabis-config'
+
+// Analytics and tracking
 import { trackCannabisEvent, initializeCannabisAnalytics } from '@/lib/cannabis-utils'
 
 // Error boundary for cannabis platform
@@ -33,7 +31,7 @@ import { CannabisNotificationProvider } from '@/providers/CannabisNotificationPr
 
 const CannabisAnalyticsManager: React.FC = () => {
   const router = useRouter()
-  const { isProduction, enableAnalytics } = getEnvironmentConfig()
+  const { enableAnalytics } = getEnvironmentConfig()
 
   useEffect(() => {
     if (enableAnalytics) {
@@ -52,7 +50,7 @@ const CannabisAnalyticsManager: React.FC = () => {
         user_agent: navigator.userAgent,
       })
     }
-  }, [enableAnalytics])
+  }, [enableAnalytics, router.asPath])
 
   useEffect(() => {
     const handleRouteChange = (url: string) => {
@@ -217,7 +215,7 @@ const CannabisSEOManager: React.FC = () => {
 
       {/* Cannabis Platform Fonts */}
       <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap"
         rel="stylesheet"
       />
 
@@ -240,7 +238,7 @@ const CannabisSEOManager: React.FC = () => {
 
       {/* Cannabis Platform Performance */}
       <meta httpEquiv="Cache-Control" content="public, max-age=31536000, immutable" />
-      
+
       {/* Cannabis Structured Data - Organization */}
       <script
         type="application/ld+json"
@@ -347,101 +345,27 @@ const CannabisSEOManager: React.FC = () => {
 }
 
 // ============================================================================
-// CANNABIS ERROR BOUNDARY COMPONENT  
+// MAIN APP COMPONENT
 // ============================================================================
 
-const CannabisErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  return (
-    <div>
-      {/* Simple error boundary - in production you'd want a proper error boundary component */}
-      {children}
-    </div>
-  )
-}
-
-// ============================================================================
-// CANNABIS APP PROVIDERS
-// ============================================================================
-
-const CannabisAppProviders: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  return (
-    <CannabisErrorBoundary>
-      <CannabisThemeProvider>
-        <CannabisAuthProvider>
-          <CannabisNotificationProvider>
-            {children}
-          </CannabisNotificationProvider>
-        </CannabisAuthProvider>
-      </CannabisThemeProvider>
-    </CannabisErrorBoundary>
-  )
-}
-
-// ============================================================================
-// MAIN CANNABIS APP COMPONENT
-// ============================================================================
-
-export default function CannabisApp({ Component, pageProps }: AppProps) {
-  const { enableAnalytics } = getEnvironmentConfig()
-
-  // Global error handling for cannabis platform
-  useEffect(() => {
-    const handleError = (event: ErrorEvent) => {
-      if (enableAnalytics) {
-        trackCannabisEvent('cannabis_javascript_error', {
-          error_message: event.message,
-          error_filename: event.filename,
-          error_line: event.lineno,
-          error_column: event.colno,
-          user_agent: navigator.userAgent,
-        })
-      }
-      console.error('Cannabis App Error:', event.error)
-    }
-
-    const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
-      if (enableAnalytics) {
-        trackCannabisEvent('cannabis_unhandled_promise_rejection', {
-          error_reason: event.reason?.toString() || 'Unknown',
-          user_agent: navigator.userAgent,
-        })
-      }
-      console.error('Cannabis App Unhandled Promise Rejection:', event.reason)
-    }
-
-    window.addEventListener('error', handleError)
-    window.addEventListener('unhandledrejection', handleUnhandledRejection)
-
-    return () => {
-      window.removeEventListener('error', handleError)
-      window.removeEventListener('unhandledrejection', handleUnhandledRejection)
-    }
-  }, [enableAnalytics])
-
+const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
   return (
     <>
-      {/* Cannabis Platform SEO & Performance */}
       <CannabisSEOManager />
-      
-      {/* Cannabis Platform Analytics */}
       <CannabisAnalyticsManager />
-
-      {/* Cannabis Platform Providers */}
-      <CannabisAppProviders>
-        <Component {...pageProps} />
-      </CannabisAppProviders>
-
-      {/* Cannabis Platform GTM Noscript */}
-      {enableAnalytics && (
-        <noscript>
-          <iframe
-            src={`https://www.googletagmanager.com/ns.html?id=${CANNABIS_CONFIG.analytics.googleTagManager}`}
-            height="0"
-            width="0"
-            style={{ display: 'none', visibility: 'hidden' }}
-          />
-        </noscript>
-      )}
+      <CannabisErrorBoundary>
+        <CannabisAuthProvider>
+          <CannabisThemeProvider>
+            <CannabisNotificationProvider>
+              <AnimatePresence mode="wait" initial={false}>
+                <Component {...pageProps} />
+              </AnimatePresence>
+            </CannabisNotificationProvider>
+          </CannabisThemeProvider>
+        </CannabisAuthProvider>
+      </CannabisErrorBoundary>
     </>
   )
 }
+
+export default MyApp
