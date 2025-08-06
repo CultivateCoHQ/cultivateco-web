@@ -1,64 +1,54 @@
 'use client'
 
-import { ThemeProvider } from 'next-themes'
-import { cn } from '@/lib/utils'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { useState } from 'react'
 
-export function CannabisThemeProvider({ children }: { children: React.ReactNode }) {
+export function CannabisQueryProvider({ children }: { children: React.ReactNode }) {
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            staleTime: 60 * 1000, // 1 minute
+            retry: 1,
+          },
+        },
+      })
+  )
+
   return (
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="light"
-      enableSystem
-      disableTransitionOnChange
-    >
+    <QueryClientProvider client={queryClient}>
       {children}
-    </ThemeProvider>
+      {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} />}
+    </QueryClientProvider>
   )
 }
 
-export function CannabisThemeContainer({ 
-  children, 
-  variant = 'default',
-  className 
-}: { 
-  children: React.ReactNode
-  variant?: 'default' | 'card' | 'section'
-  className?: string
-}) {
-  const variants = {
-    default: '',
-    card: 'bg-white rounded-lg shadow-sm border border-gray-200 p-6',
-    section: 'bg-gray-50 rounded-lg p-4'
-  }
+// Export aliases for backward compatibility
+export const QueryProvider = CannabisQueryProvider
 
-  return (
-    <div className={cn(variants[variant], className)}>
-      {children}
-    </div>
-  )
+// Cannabis Query Keys
+export const cannabisQueryKeys = {
+  all: ['cannabis'] as const,
+  products: () => [...cannabisQueryKeys.all, 'products'] as const,
+  customers: () => [...cannabisQueryKeys.all, 'customers'] as const,
+  orders: () => [...cannabisQueryKeys.all, 'orders'] as const,
+  staff: () => [...cannabisQueryKeys.all, 'staff'] as const,
+  vendors: () => [...cannabisQueryKeys.all, 'vendors'] as const,
+  inventory: () => [...cannabisQueryKeys.all, 'inventory'] as const,
+  metrics: () => [...cannabisQueryKeys.all, 'metrics'] as const,
 }
 
-export function CannabisStatusIndicator({ 
-  status,
-  size = 'sm'
-}: { 
-  status: 'success' | 'warning' | 'error' | 'info'
-  size?: 'sm' | 'md' | 'lg'
-}) {
-  const statusColors = {
-    success: 'bg-green-500',
-    warning: 'bg-yellow-500', 
-    error: 'bg-red-500',
-    info: 'bg-blue-500'
-  }
-
-  const sizes = {
-    sm: 'w-2 h-2',
-    md: 'w-3 h-3',
-    lg: 'w-4 h-4'
-  }
-
-  return (
-    <div className={cn('rounded-full', statusColors[status], sizes[size])} />
-  )
+// Cannabis Query Utils
+export const cannabisQueryUtils = {
+  invalidateAll: (queryClient: QueryClient) => {
+    queryClient.invalidateQueries({ queryKey: cannabisQueryKeys.all })
+  },
+  invalidateProducts: (queryClient: QueryClient) => {
+    queryClient.invalidateQueries({ queryKey: cannabisQueryKeys.products() })
+  },
+  invalidateCustomers: (queryClient: QueryClient) => {
+    queryClient.invalidateQueries({ queryKey: cannabisQueryKeys.customers() })
+  },
 }
