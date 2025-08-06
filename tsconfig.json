@@ -20,20 +20,7 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@/components/*": ["./src/components/*"],
-      "@/pages/*": ["./src/pages/*"],
-      "@/styles/*": ["./src/styles/*"],
-      "@/lib/*": ["./src/lib/*"],
-      "@/utils/*": ["./src/utils/*"],
-      "@/hooks/*": ["./src/hooks/*"],
-      "@/types/*": ["./src/types/*"],
-      "@/data/*": ["./src/data/*"],
-      "@/config/*": ["./src/config/*"],
-      "@/cannabis/*": ["./src/cannabis/*"],
-      "@/compliance/*": ["./src/compliance/*"],
-      "@/governance/*": ["./src/governance/*"],
-      "@/map/*": ["./src/map/*"]
+      "@/*": ["./src/*"]
     },
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
