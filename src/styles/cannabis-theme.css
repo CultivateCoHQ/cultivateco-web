@@ -1,0 +1,31 @@
+/*
+ * Custom CSS variables for the Cannabis Platform.
+ * These variables are used to ensure a consistent design system.
+ */
+:root {
+  --color-primary: #16a34a; /* A vibrant green for primary actions */
+  --color-secondary: #4ade80; /* A lighter green for secondary elements */
+  --color-accent: #a3e635; /* An accent color, maybe for highlights */
+  --color-background-dark: #1f2937; /* A dark gray for backgrounds */
+  --color-background-light: #f3f4f6; /* A light gray for backgrounds */
+  --color-text-dark: #111827; /* Dark text for light backgrounds */
+  --color-text-light: #f9fafb; /* Light text for dark backgrounds */
+}
+
+/*
+ * This file can also contain other global theme-related styles.
+ * For example, custom typography, shadows, or button styles.
+ */
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-text-light);
+  border-radius: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  transition: all 0.3s ease-in-out;
+}
+
+.btn-primary:hover {
+  background-color: #15803d; /* A darker shade for hover effect */
+}
