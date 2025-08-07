@@ -20,11 +20,6 @@ import { trackCannabisEvent, initializeCannabisAnalytics } from '@/lib/cannabis-
 // Error boundary for cannabis platform
 import { CannabisErrorBoundary } from '@/components/errors/CannabisErrorBoundary'
 
-// Cannabis platform providers
-import { CannabisAuthProvider } from '@/providers/CannabisAuthProvider'
-import { CannabisThemeProvider } from '@/providers/CannabisThemeProvider'
-import { CannabisNotificationProvider } from '@/providers/CannabisNotificationProvider'
-
 // ============================================================================
 // CANNABIS APP ANALYTICS & TRACKING
 // ============================================================================
@@ -354,15 +349,9 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
       <CannabisSEOManager />
       <CannabisAnalyticsManager />
       <CannabisErrorBoundary>
-        <CannabisAuthProvider>
-          <CannabisThemeProvider>
-            <CannabisNotificationProvider>
-              <AnimatePresence mode="wait" initial={false}>
-                <Component {...pageProps} />
-              </AnimatePresence>
-            </CannabisNotificationProvider>
-          </CannabisThemeProvider>
-        </CannabisAuthProvider>
+        <AnimatePresence mode="wait" initial={false}>
+          <Component {...pageProps} />
+        </AnimatePresence>
       </CannabisErrorBoundary>
     </>
   )
