@@ -54,7 +54,7 @@
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.31",
     "postcss-custom-properties": "^13.3.5",
-    "postcss-custom-media": "^13.3.5",
+    "postcss-custom-media": "^14.1.0",
     "eslint": "^8.53.0",
     "eslint-config-next": "^14.0.0",
     "@typescript-eslint/eslint-plugin": "^6.10.0",
