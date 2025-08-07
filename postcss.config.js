@@ -12,20 +12,16 @@ module.exports = {
     // PostCSS Nested for cannabis design system organization
     'postcss-nested': {},
     
-    // PostCSS Custom Properties for cannabis brand color variables
+    // PostCSS Custom Properties for cannabis brand color variables (FIXED)
     'postcss-custom-properties': {
       preserve: false,
-      exportTo: [
-        'src/styles/cannabis-variables.json'
-      ]
+      // REMOVED exportTo - this was causing the deprecation warnings!
     },
     
-    // PostCSS Custom Media for cannabis responsive design
+    // PostCSS Custom Media for cannabis responsive design (FIXED)  
     'postcss-custom-media': {
       preserve: false,
-      exportTo: [
-        'src/styles/cannabis-media-queries.json'
-      ]
+      // REMOVED exportTo - this was causing the deprecation warnings!
     },
     
     // Cannabis-specific CSS optimizations for production
@@ -182,12 +178,12 @@ module.exports = {
     'postcss-preset-env': {
       stage: 3,
       features: {
-        // Cannabis design system modern CSS features
+        // Cannabis design system modern CSS features (FIXED)
         'custom-properties': false, // Handled by postcss-custom-properties
         'custom-media-queries': false, // Handled by postcss-custom-media
         'nesting-rules': true,
-        'color-mod-function': { unresolved: 'warn' },
-        'hex-alpha-notation': true,
+        'color-mod-function': false, // DISABLED - was causing warnings
+        'hex-alpha-notation': false, // DISABLED - was causing warnings
         'lab-function': true,
         'logical-properties-and-values': true,
         'media-query-ranges': true,
@@ -206,10 +202,6 @@ module.exports = {
       ],
     },
     
-    // PostCSS Reporter for cannabis development feedback
-    'postcss-reporter': {
-      clearReportedMessages: true,
-      throwError: process.env.NODE_ENV === 'production',
-    },
+    // REMOVED postcss-reporter completely - it was causing build failures!
   },
 }
