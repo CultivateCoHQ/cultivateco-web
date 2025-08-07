@@ -1,135 +1,55 @@
-/**
- * @fileoverview Utility functions for the CultivateCo Cannabis Platform.
- * This file contains helper functions for analytics, formatting, and other common operations.
- */
+import { type ClassValue, clsx } from "clsx"
+import { twMerge } from "tailwind-merge"
 
-// ============================================================================
-// ANALYTICS FUNCTIONS
-// ============================================================================
-
-interface CannabisAnalyticsConfig {
-  googleAnalyticsId?: string;
-  intercomAppId?: string;
-  hotjarSiteId?: number;
+// The 'cn' function combines Tailwind CSS classes
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
 }
 
-/**
- * Initialize cannabis analytics services
- * @param config - Analytics configuration object
- */
-export const initializeCannabisAnalytics = (config: CannabisAnalyticsConfig): void => {
-  if (typeof window === 'undefined') return;
+// Function to format a cannabis-related phone number
+export function formatCannabisPhone(phone: string): string {
+  // Implementation of phone formatting
+  // ...
+  return phone; // Placeholder
+}
 
-  // Initialize Google Analytics
-  if (config.googleAnalyticsId) {
-    console.log('Initializing Google Analytics with ID:', config.googleAnalyticsId);
-    // Add your GA initialization logic here
-  }
+// Function to track a page view for cannabis analytics
+export function trackCannabisPageView(url: string): void {
+  // Implementation of page view tracking
+  // ...
+}
 
-  // Initialize Intercom
-  if (config.intercomAppId) {
-    console.log('Initializing Intercom with App ID:', config.intercomAppId);
-    // Add your Intercom initialization logic here
-  }
+// Function to format a compliance score
+export function formatComplianceScore(score: number): string {
+  // Implementation of score formatting
+  // ...
+  return score.toString(); // Placeholder
+}
 
-  // Initialize Hotjar
-  if (config.hotjarSiteId) {
-    console.log('Initializing Hotjar with Site ID:', config.hotjarSiteId);
-    // Add your Hotjar initialization logic here
-  }
-};
+// Function to format cannabis revenue
+export function formatCannabisRevenue(revenue: number): string {
+  // Implementation of revenue formatting
+  // ...
+  return `$${revenue.toFixed(2)}`; // Placeholder
+}
 
-/**
- * Track cannabis-related events
- * @param eventName - Name of the event to track
- * @param data - Event data object
- */
-export const trackCannabisEvent = (eventName: string, data: Record<string, any>): void => {
-  if (typeof window === 'undefined') return;
+// Function to validate a cannabis-related email address
+export function isValidCannabisEmail(email: string): boolean {
+  // Implementation of email validation
+  // ...
+  return true; // Placeholder
+}
 
-  console.log('Tracking cannabis event:', eventName, data);
-  
-  // Track with Google Analytics
-  if ((window as any).gtag) {
-    (window as any).gtag('event', eventName, data);
-  }
+// Function to validate a cannabis-related phone number
+export function isValidCannabisPhone(phone: string): boolean {
+  // Implementation of phone validation
+  // ...
+  return true; // Placeholder
+}
 
-  // Track with other analytics services as needed
-};
-
-// ============================================================================
-// DATE FORMATTING FUNCTIONS
-// ============================================================================
-
-/**
- * Format a date for cannabis platform display
- * @param date - Date to format
- * @param format - Format string (default: 'MM/dd/yyyy')
- * @returns Formatted date string
- */
-export const formatCannabisDate = (date: Date | string, format: string = 'MM/dd/yyyy'): string => {
-  const dateObj = typeof date === 'string' ? new Date(date) : date;
-  
-  if (isNaN(dateObj.getTime())) {
-    return 'Invalid Date';
-  }
-
-  // Simple formatting - you can enhance this with a proper date library
-  const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-  const day = String(dateObj.getDate()).padStart(2, '0');
-  const year = dateObj.getFullYear();
-
-  switch (format) {
-    case 'MM/dd/yyyy':
-      return `${month}/${day}/${year}`;
-    case 'yyyy-MM-dd':
-      return `${year}-${month}-${day}`;
-    case 'MMM dd, yyyy':
-      const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                         'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-      return `${monthNames[dateObj.getMonth()]} ${day}, ${year}`;
-    default:
-      return `${month}/${day}/${year}`;
-  }
-};
-
-// ============================================================================
-// ADDITIONAL UTILITY FUNCTIONS
-// ============================================================================
-
-/**
- * Validate cannabis compliance data
- * @param data - Data to validate
- * @returns Boolean indicating if data is valid
- */
-export const validateCannabisCompliance = (data: any): boolean => {
-  // Add your validation logic here
-  return data && typeof data === 'object';
-};
-
-/**
- * Format cannabis product names
- * @param productName - Raw product name
- * @returns Formatted product name
- */
-export const formatCannabisProductName = (productName: string): string => {
-  if (!productName) return '';
-  
-  // Capitalize first letter of each word
-  return productName
-    .toLowerCase()
-    .split(' ')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
-};
-
-/**
- * Generate cannabis tracking ID
- * @param prefix - Prefix for the ID
- * @returns Generated tracking ID
- */
-export const generateCannabisTrackingId = (prefix: string = 'CAN'): string => {
-  const timestamp = Date.now().toString(36);
-  const random = Math.random().toString(36).substr(2, 5);
-  return `${prefix}-${timestamp}-${random}`.toUpperCase();
-};
+// Function to sanitize cannabis-related user input
+export function sanitizeCannabisInput(input: string): string {
+  // Implementation of input sanitization
+  // ...
+  return input; // Placeholder
+}
