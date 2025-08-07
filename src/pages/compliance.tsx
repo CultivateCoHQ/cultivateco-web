@@ -38,6 +38,7 @@ import {
   Lock,
   Smartphone,
   Globe,
+  DollarSign,
 } from 'lucide-react'
 
 import { CannabisLayout } from '@/components/layout/CannabisLayout'
@@ -52,6 +53,10 @@ import type {
   CannabisTestimonial,
   CannabisStateInfo,
 } from '@/types/cannabis-marketing'
+
+// === ADDED THIS LINE ===
+import Calculator from '@/components/Calculator';
+// =========================
 
 // ============================================================================
 // CANNABIS COMPLIANCE DATA
@@ -821,9 +826,11 @@ const CannabisComplianceTestimonialsSection: React.FC = () => {
 const CannabisComplianceROISection: React.FC = () => {
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
+  const [calculatorResult, setCalculatorResult] = useState<number | null>(null);
 
   const totalPotentialSavings = CANNABIS_COMPLIANCE_ROI.reduce((sum, item) => sum + item.savings, 0)
-
+  const formattedSavings = formatCannabisRevenue(totalPotentialSavings);
+  
   return (
     <section ref={ref} className="py-20 lg:py-32 bg-white">
       <div className="container mx-auto px-4">
@@ -831,171 +838,49 @@ const CannabisComplianceROISection: React.FC = () => {
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
           variants={staggerContainerVariants}
-          className="text-center mb-16"
+          className="grid lg:grid-cols-2 gap-12 items-center"
         >
-          <motion.div variants={fadeInUpVariants}>
-            <h2 className="text-3xl lg:text-5xl font-bold text-gray-900 mb-6">
-              Cannabis Compliance
-              <span className="block text-cannabis-green-700">ROI Calculator</span>
+          {/* ROI Content */}
+          <motion.div variants={fadeInUpVariants} className="space-y-6">
+            <h2 className="text-3xl lg:text-5xl font-bold text-gray-900">
+              Calculate Your
+              <span className="block text-cannabis-green-700">Compliance ROI</span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Quantify the financial impact of perfect cannabis compliance. Our customers 
-              typically save over $200,000 annually through violation prevention.
+            <p className="text-xl text-gray-600 leading-relaxed">
+              Use our calculator to estimate your potential savings by preventing fines and
+              streamlining reporting with our platform.
             </p>
-          </motion.div>
-        </motion.div>
-
-        <motion.div
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          variants={staggerContainerVariants}
-          className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16"
-        >
-          {CANNABIS_COMPLIANCE_ROI.map((item, index) => {
-            const Icon = item.icon
-            return (
-              <motion.div
-                key={item.category}
-                variants={scaleInVariants}
-                className="bg-cannabis-cream-50 rounded-2xl p-6 text-center hover:shadow-cannabis transition-all duration-300"
-              >
-                <div className="bg-cannabis-green-100 rounded-full p-3 w-16 h-16 mx-auto mb-4">
-                  <Icon className="h-10 w-10 text-cannabis-green-600" />
-                </div>
-                
-                <h3 className="text-lg font-bold text-gray-900 mb-2">{item.category}</h3>
-                <p className="text-gray-600 text-sm mb-4">{item.description}</p>
-                
-                <div className="space-y-2">
-                  <div className="text-2xl font-bold text-cannabis-green-600">
-                    {formatCannabisRevenue(item.savings)}
+            <motion.div variants={fadeInUpVariants} className="grid sm:grid-cols-2 gap-6">
+              {CANNABIS_COMPLIANCE_ROI.map((item, index) => {
+                const Icon = item.icon
+                return (
+                  <div key={index} className="flex items-start space-x-4 p-4 rounded-lg bg-cannabis-cream-50">
+                    <div className="flex-shrink-0 p-2 rounded-full bg-cannabis-green-100">
+                      <Icon className="h-6 w-6 text-cannabis-green-600" />
+                    </div>
+                    <div>
+                      <div className="text-lg font-semibold text-gray-900">{item.category}</div>
+                      <div className="text-sm text-gray-600">{item.description}</div>
+                    </div>
                   </div>
-                  <div className="text-sm text-gray-500">{item.frequency}</div>
-                </div>
-              </motion.div>
-            )
-          })}
-        </motion.div>
-
-        <motion.div
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          variants={fadeInUpVariants}
-          className="bg-cannabis-green-50 rounded-2xl p-8 text-center max-w-4xl mx-auto"
-        >
-          <div className="space-y-6">
-            <TrendingUp className="h-16 w-16 text-cannabis-green-600 mx-auto" />
-            
-            <div>
-              <h3 className="text-3xl font-bold text-cannabis-green-900 mb-2">
-                {formatCannabisRevenue(totalPotentialSavings)}+
-              </h3>
-              <p className="text-xl text-cannabis-green-800">
-                Total potential annual savings from comprehensive cannabis compliance
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-6 text-center">
+                )
+              })}
+            </motion.div>
+            <div className="bg-cannabis-green-100 rounded-lg p-6 flex items-center justify-between mt-8 shadow-cannabis">
               <div>
-                <div className="text-2xl font-bold text-cannabis-green-700">95%</div>
-                <div className="text-sm text-cannabis-green-600">Violation reduction</div>
+                <div className="text-sm text-gray-600 font-medium">Estimated Total Annual Savings</div>
+                <div className="text-3xl font-bold text-cannabis-green-700">{formattedSavings}</div>
               </div>
-              <div>
-                <div className="text-2xl font-bold text-cannabis-green-700">80%</div>
-                <div className="text-sm text-cannabis-green-600">Time savings</div>
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-cannabis-green-700">100%</div>
-                <div className="text-sm text-cannabis-green-600">Audit readiness</div>
-              </div>
+              <DollarSign className="h-10 w-10 text-cannabis-green-600" />
             </div>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                href="/demo"
-                className="inline-flex items-center space-x-2 rounded-lg cannabis-gradient px-8 py-3 text-white font-semibold hover:shadow-cannabis-lg transition-all duration-200"
-              >
-                <Calculator className="h-5 w-5" />
-                <span>Calculate Your ROI</span>
-              </Link>
-              <Link
-                href="/pricing"
-                className="inline-flex items-center space-x-2 rounded-lg border-2 border-cannabis-green-600 px-8 py-3 text-cannabis-green-600 font-semibold hover:bg-cannabis-green-50 transition-colors"
-              >
-                <Target className="h-5 w-5" />
-                <span>View Pricing</span>
-              </Link>
-            </div>
-          </div>
-        </motion.div>
-      </div>
-    </section>
-  )
-}
-
-const CannabisComplianceCTASection: React.FC = () => {
-  const handleDemoClick = () => {
-    trackCannabisEvent('cannabis_compliance_cta_click', {
-      source: 'compliance_cta',
-      button_text: 'Start Compliance Demo'
-    })
-  }
-
-  return (
-    <section className="py-20 lg:py-32 bg-gradient-to-br from-cannabis-green-700 to-cannabis-blue-700 text-white">
-      <div className="container mx-auto px-4 text-center">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={staggerContainerVariants}
-          className="space-y-8"
-        >
-          <motion.div variants={fadeInUpVariants}>
-            <h2 className="text-3xl lg:text-5xl font-bold mb-6">
-              Ready for Perfect
-              <span className="block">Cannabis Compliance?</span>
-            </h2>
-            <p className="text-xl opacity-90 max-w-3xl mx-auto">
-              Join thousands of cannabis operators who trust CultivateCo for 
-              regulatory compliance, violation prevention, and audit readiness.
-            </p>
           </motion.div>
 
-          <motion.div variants={fadeInUpVariants} className="flex flex-col sm:flex-row justify-center gap-4">
-            <Link
-              href="/demo"
-              onClick={handleDemoClick}
-              className="inline-flex items-center justify-center space-x-2 rounded-lg bg-white px-8 py-4 text-lg font-semibold text-cannabis-green-700 hover:bg-cannabis-cream-50 transition-all duration-200 hover:scale-105"
-            >
-              <span>Start Compliance Demo</span>
-              <Shield className="h-5 w-5" />
-            </Link>
-            
-            <Link
-              href="/contact"
-              className="inline-flex items-center justify-center space-x-2 rounded-lg border-2 border-white px-8 py-4 text-lg font-semibold text-white hover:bg-white/10 transition-all duration-200"
-            >
-              <span>Contact Compliance Experts</span>
-              <ArrowRight className="h-5 w-5" />
-            </Link>
-          </motion.div>
-
-          <motion.div variants={fadeInUpVariants} className="pt-8">
-            <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-8 text-sm opacity-75">
-              <div className="flex items-center space-x-2">
-                <CheckCircle className="h-4 w-4" />
-                <span>99.8% compliance score average</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <CheckCircle className="h-4 w-4" />
-                <span>25,000+ violations prevented</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <CheckCircle className="h-4 w-4" />
-                <span>19+ states supported</span>
-              </div>
-            </div>
+          {/* Calculator Component */}
+          <motion.div
+            variants={fadeInUpVariants}
+            className="flex justify-center"
+          >
+            <Calculator />
           </motion.div>
         </motion.div>
       </div>
@@ -1003,75 +888,23 @@ const CannabisComplianceCTASection: React.FC = () => {
   )
 }
 
-// ============================================================================
-// MAIN CANNABIS COMPLIANCE PAGE COMPONENT
-// ============================================================================
 
-const CannabisCompliancePage: React.FC = () => {
-  const seo: CannabisSEOData = {
-    title: 'Cannabis Compliance Software | AI-Powered Monitoring | METRC Integration',
-    description: 'Advanced cannabis compliance software with AI-powered monitoring, METRC integration, and automated violation prevention. 99.8% compliance score average across 19+ states.',
-    keywords: [
-      'cannabis compliance software',
-      'cannabis regulatory compliance',
-      'metrc integration',
-      'cannabis violation prevention',
-      'cannabis audit trail',
-      'cannabis compliance monitoring',
-      'dispensary compliance software',
-      'cannabis regulatory reporting',
-      'cannabis license tracking',
-      'cannabis compliance automation',
-    ],
-    ogTitle: 'Cannabis Compliance Software | AI-Powered Monitoring & METRC Integration',
-    ogDescription: 'Advanced AI-powered cannabis compliance monitoring with METRC integration, automated violation prevention, and comprehensive audit trails for cannabis operators.',
-    ogImage: 'https://cultivateco.com/og-cannabis-compliance-software.jpg',
-    structuredData: {
-      '@context': 'https://schema.org',
-      '@type': 'SoftwareApplication',
-      name: 'CultivateCo Cannabis Compliance Platform',
-      applicationCategory: 'Business Software',
-      description: 'AI-powered cannabis compliance monitoring with METRC integration and automated violation prevention',
-      operatingSystem: 'Web-based',
-      offers: {
-        '@type': 'Offer',
-        price: '0',
-        priceCurrency: 'USD',
-        description: '30-day free trial available',
-      },
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: '4.9',
-        ratingCount: '847',
-      },
-      featureList: [
-        'AI-powered violation prevention',
-        'Real-time METRC integration',
-        'Automated compliance reporting',
-        'Comprehensive audit trails',
-        'Multi-state regulatory support',
-      ],
-    },
+export default function CompliancePage() {
+  const seoData: CannabisSEOData = {
+    title: 'Cannabis Compliance & METRC Integration | CultivateCo',
+    description: 'Automate cannabis compliance with CultivateCo\'s AI-powered platform. Features include real-time METRC integration, violation prevention, and automated reporting.',
+    ogImage: '/compliance/og-image.jpg',
   }
 
   return (
-    <CannabisLayout seo={seo}>
+    <CannabisLayout seoData={seoData}>
       <CannabisComplianceHeroSection />
-      
       {CANNABIS_COMPLIANCE_FEATURES.map((feature, index) => (
-        <CannabisComplianceFeatureSection 
-          key={feature.id} 
-          feature={feature} 
-          index={index} 
-        />
+        <CannabisComplianceFeatureSection key={feature.id} feature={feature} index={index} />
       ))}
-      
       <CannabisComplianceStatesSection />
-      <CannabisComplianceTestimonialsSection />
       <CannabisComplianceROISection />
-      <CannabisComplianceCTASection />
+      <CannabisComplianceTestimonialsSection />
     </CannabisLayout>
   )
 }
-
-export default CannabisCompliancePage
