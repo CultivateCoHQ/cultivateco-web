@@ -1,0 +1,15 @@
+/*
+ * Custom styles for Swiper.js, specific to the Cannabis Platform marketing website.
+ * These styles can be used to override default Swiper styling or add new custom classes.
+ */
+.swiper-pagination-bullet-active {
+  background-color: #16a34a !important; /* Tailwind green-600 */
+}
+
+/*
+ * Adjust styling for navigation arrows if needed.
+ */
+.swiper-button-next,
+.swiper-button-prev {
+  color: #16a34a !important;
+}
