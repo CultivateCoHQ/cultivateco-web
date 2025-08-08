@@ -350,3 +350,7 @@ const HomePage: NextPage = () => {
         </div>
       </section>
     </CannabisLayout>
+  )
+}
+
+export default HomePage
