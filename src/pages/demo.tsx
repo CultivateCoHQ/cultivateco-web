@@ -1,8 +1,8 @@
 /**
  * =============================================================================
- * CultivateCo Cannabis Demo Booking Page
+ * CultivateCo Enterprise Cannabis Consultation Booking Page
  * =============================================================================
- * Comprehensive demo booking page with form and conversion optimization
+ * Pharmaceutical-grade cannabis compliance consultation for enterprise prospects
  */
 
 'use client'
@@ -33,6 +33,11 @@ import {
   Monitor,
   Play,
   Download,
+  Globe,
+  Lock,
+  Eye,
+  AlertTriangle,
+  DollarSign,
 } from 'lucide-react'
 
 import { CannabisLayout } from '@/components/layout/CannabisLayout'
@@ -52,181 +57,144 @@ import type {
 } from '@/types/cannabis-marketing'
 
 // ============================================================================
-// CANNABIS DEMO PAGE DATA
+// ENTERPRISE CANNABIS CONSULTATION DATA
 // ============================================================================
 
-const CANNABIS_DEMO_BENEFITS = [
+const ENTERPRISE_CONSULTATION_BENEFITS = [
   {
     icon: Shield,
-    title: 'Compliance Made Simple',
-    description: 'See how our AI-powered compliance monitoring prevents violations and maintains perfect regulatory scores.',
-    duration: '10 minutes',
+    title: 'Pharmaceutical-Grade Validation',
+    description: 'See our IQ/OQ/PQ documentation framework and 21 CFR Part 11 compliant electronic records system.',
+    duration: '15 minutes',
+    riskMitigation: 'Prevents $500K-$2M+ license revocation risk'
   },
   {
-    icon: Calculator,
-    title: 'Cannabis POS Demo',
-    description: 'Experience our intuitive POS system with tax calculation, age verification, and purchase limits.',
+    icon: Lock,
+    title: 'Banking Compliance Demonstration',
+    description: 'Live demonstration of BSA/AML transaction monitoring and institutional investor-ready audit trails.',
     duration: '15 minutes',
+    riskMitigation: 'Enables banking partnerships worth $200K-$1M+ annually'
+  },
+  {
+    icon: Globe,
+    title: 'Multi-State Operations Platform',
+    description: 'Unified compliance management across 15+ states with real-time regulatory change monitoring.',
+    duration: '15 minutes',
+    riskMitigation: 'Eliminates 80% of compliance overhead across jurisdictions'
   },
   {
     icon: BarChart3,
-    title: 'Analytics Dashboard',
-    description: 'Explore powerful analytics showing sales insights, inventory optimization, and compliance trends.',
-    duration: '10 minutes',
-  },
-  {
-    icon: Target,
-    title: 'METRC Integration',
-    description: 'Watch seamless METRC synchronization with real-time package tracking and manifest management.',
+    title: 'Enterprise ROI Analysis',
+    description: 'Custom ROI calculation showing $1.65M+ average annual risk protection for your specific operation.',
     duration: '15 minutes',
+    riskMitigation: 'Quantifies exact savings and risk mitigation value'
   },
 ]
 
-const CANNABIS_DEMO_STATS = [
-  { label: 'Average Demo Length', value: '30 min', icon: Clock },
-  { label: 'Questions Answered', value: '25+', icon: Users },
-  { label: 'ROI Demonstrated', value: '300%', icon: TrendingUp },
-  { label: 'Implementation Time', value: '2 weeks', icon: Zap },
+const ENTERPRISE_CONSULTATION_STATS = [
+  { label: 'Average Consultation', value: '60 min', icon: Clock },
+  { label: 'Executive Questions Answered', value: '50+', icon: Users },
+  { label: 'Average ROI Demonstrated', value: '400%', icon: TrendingUp },
+  { label: 'Enterprise Implementation', value: '2 weeks', icon: Zap },
 ]
 
-const CANNABIS_DEMO_TESTIMONIALS: CannabisTestimonial[] = [
+const ENTERPRISE_TESTIMONIALS: CannabisTestimonial[] = [
   {
     id: '1',
-    name: 'Maria Gonzalez',
-    title: 'Operations Director',
-    company: 'Green Valley Cannabis',
-    state: 'Colorado',
-    image: '/testimonials/maria-gonzalez.jpg',
-    quote: 'The demo showed us exactly how CultivateCo would solve our compliance headaches. We signed up the same day.',
+    name: 'Dr. Sarah Martinez',
+    title: 'Chief Compliance Officer',
+    company: 'Verde Holdings (12 States)',
+    state: 'Multi-State',
+    image: '/testimonials/sarah-martinez.jpg',
+    quote: 'The enterprise consultation showed us exactly how pharmaceutical-grade compliance would eliminate our $2M+ annual risk exposure. We signed the next day.',
     rating: 5,
-    category: 'general',
+    category: 'enterprise',
     featured: true,
     verified: true,
     date: '2024-02-10',
   },
   {
     id: '2',
-    name: 'James Rodriguez',
+    name: 'Michael Chen',
     title: 'CEO',
-    company: 'Desert Sun Dispensary',
-    state: 'New Mexico',
-    image: '/testimonials/james-rodriguez.jpg',
-    quote: 'Best 30 minutes I\'ve spent on software demos. CultivateCo\'s platform is exactly what our industry needs.',
+    company: 'Pacific Cannabis Group',
+    state: 'California',
+    image: '/testimonials/michael-chen.jpg',
+    quote: 'The SOC 2 Type II certification was crucial for our Series B. CultivateCo\'s enterprise consultation convinced our institutional investors immediately.',
     rating: 5,
-    category: 'general',
+    category: 'enterprise',
     featured: true,
     verified: true,
     date: '2024-01-28',
   },
   {
     id: '3',
-    name: 'Lisa Chen',
-    title: 'Compliance Manager',
+    name: 'Jennifer Kim',
+    title: 'COO',
     company: 'Rocky Mountain Cannabis',
     state: 'Colorado',
-    image: '/testimonials/lisa-chen.jpg',
-    quote: 'The demo convinced our entire team. Seeing the compliance features in action made the decision easy.',
+    image: '/testimonials/jennifer-kim.jpg',
+    quote: 'Best enterprise software consultation I\'ve experienced. The pharmaceutical-grade approach is exactly what our industry needs for institutional credibility.',
     rating: 5,
-    category: 'compliance',
+    category: 'enterprise',
     featured: true,
     verified: true,
     date: '2024-02-05',
   },
 ]
 
-const CANNABIS_BUSINESS_TYPES = [
-  'Dispensary',
-  'Cultivation',
-  'Manufacturing',
-  'Testing Lab',
-  'Delivery Service',
-  'Consulting',
-  'Other',
+const ENTERPRISE_BUSINESS_TYPES = [
+  'Multi-State Operator (MSO)',
+  'Single-State Enterprise (5+ locations)',
+  'Cultivation Facility (Large Scale)',
+  'Manufacturing & Processing',
+  'Testing Laboratory',
+  'Institutional Investor/Fund',
+  'Cannabis Holding Company',
+  'Other Enterprise Operation',
 ]
 
-const CANNABIS_MONTHLY_REVENUE_OPTIONS = [
-  'Pre-revenue',
-  'Less than $50K',
-  '$50K - $100K',
-  '$100K - $250K',
-  '$250K - $500K',
-  '$500K - $1M',
-  '$1M+',
-  'Prefer not to say',
+const ENTERPRISE_REVENUE_OPTIONS = [
+  '$1M - $5M annually',
+  '$5M - $15M annually', 
+  '$15M - $50M annually',
+  '$50M - $100M annually',
+  '$100M+ annually',
+  'Pre-revenue (institutional backing)',
+  'Confidential/Custom discussion',
 ]
 
-const CANNABIS_TIMELINE_OPTIONS = [
-  'Immediate (within 1 month)',
-  '1-3 months',
-  '3-6 months',
-  '6-12 months',
-  'Just researching',
+const ENTERPRISE_URGENCY_OPTIONS = [
+  'Immediate compliance crisis (< 30 days)',
+  'Regulatory deadline approaching (1-3 months)',
+  'Planned expansion (3-6 months)',
+  'Strategic initiative (6-12 months)',
+  'Due diligence for investment',
+  'Evaluating current solution replacement',
 ]
 
-const CANNABIS_INTERESTS = [
-  'POS System',
-  'Compliance Monitoring',
-  'METRC Integration',
-  'Analytics & Reporting',
-  'Inventory Management',
-  'Multi-location Management',
-  'Mobile Apps',
-  'API Integration',
-]
-
-const US_STATES = [
-  'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut',
-  'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa',
-  'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan',
-  'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire',
-  'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio',
-  'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota',
-  'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia',
-  'Wisconsin', 'Wyoming',
+const ENTERPRISE_COMPLIANCE_CHALLENGES = [
+  'Multi-state regulatory coordination',
+  'Banking relationship requirements',
+  'Institutional investor compliance',
+  'SOC 2 / Security certification needs',
+  'Audit preparation and documentation',
+  'Risk mitigation and insurance',
+  'Federal legalization preparation',
+  'Export/international requirements',
+  'Pharmaceutical-grade validation',
+  'Custom compliance requirements',
 ]
 
 // ============================================================================
-// CANNABIS ANIMATION VARIANTS
+// ENTERPRISE FORM COMPONENT
 // ============================================================================
 
-const fadeInUpVariants = {
-  hidden: { opacity: 0, y: 60 },
-  visible: { 
-    opacity: 1, 
-    y: 0,
-    transition: { duration: 0.6, ease: 'easeOut' }
-  }
-}
-
-const staggerContainerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2
-    }
-  }
-}
-
-const scaleInVariants = {
-  hidden: { opacity: 0, scale: 0.8 },
-  visible: { 
-    opacity: 1, 
-    scale: 1,
-    transition: { duration: 0.5, ease: 'easeOut' }
-  }
-}
-
-// ============================================================================
-// CANNABIS DEMO FORM COMPONENT
-// ============================================================================
-
-interface CannabisFormErrors {
+interface EnterpriseFormErrors {
   [key: string]: string
 }
 
-const CannabisDemoForm: React.FC = () => {
+const EnterpriseConsultationForm: React.FC = () => {
   const [formData, setFormData] = useState<CannabisDemoRequest>({
     firstName: '',
     lastName: '',
@@ -245,7 +213,7 @@ const CannabisDemoForm: React.FC = () => {
     consent: false,
   })
 
-  const [errors, setErrors] = useState<CannabisFormErrors>({})
+  const [errors, setErrors] = useState<EnterpriseFormErrors>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [submitError, setSubmitError] = useState<string>('')
@@ -253,33 +221,31 @@ const CannabisDemoForm: React.FC = () => {
   const handleInputChange = (field: keyof CannabisDemoRequest, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }))
     
-    // Clear error when user starts typing
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }))
     }
   }
 
-  const handleInterestToggle = (interest: string) => {
-    const currentInterests = formData.interests
-    const isSelected = currentInterests.includes(interest)
+  const handleChallengeToggle = (challenge: string) => {
+    const currentChallenges = formData.interests
+    const isSelected = currentChallenges.includes(challenge)
     
-    const newInterests = isSelected
-      ? currentInterests.filter(i => i !== interest)
-      : [...currentInterests, interest]
+    const newChallenges = isSelected
+      ? currentChallenges.filter(i => i !== challenge)
+      : [...currentChallenges, challenge]
     
-    handleInputChange('interests', newInterests)
+    handleInputChange('interests', newChallenges)
   }
 
   const validateForm = (): boolean => {
-    const newErrors: CannabisFormErrors = {}
+    const newErrors: EnterpriseFormErrors = {}
 
-    // Required field validation
     if (!formData.firstName.trim()) newErrors.firstName = 'First name is required'
     if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required'
     if (!formData.email.trim()) {
-      newErrors.email = 'Email is required'
+      newErrors.email = 'Business email is required'
     } else if (!isValidCannabisEmail(formData.email)) {
-      newErrors.email = 'Please enter a valid email address'
+      newErrors.email = 'Please enter a valid business email address'
     }
     if (!formData.phone.trim()) {
       newErrors.phone = 'Phone number is required'
@@ -287,13 +253,12 @@ const CannabisDemoForm: React.FC = () => {
       newErrors.phone = 'Please enter a valid phone number'
     }
     if (!formData.company.trim()) newErrors.company = 'Company name is required'
-    if (!formData.title.trim()) newErrors.title = 'Title is required'
-    if (!formData.state) newErrors.state = 'State is required'
+    if (!formData.title.trim()) newErrors.title = 'Executive title is required'
     if (!formData.businessType) newErrors.businessType = 'Business type is required'
     if (!formData.monthlyRevenue) newErrors.monthlyRevenue = 'Revenue range is required'
-    if (!formData.timeline) newErrors.timeline = 'Timeline is required'
-    if (formData.interests.length === 0) newErrors.interests = 'Please select at least one area of interest'
-    if (!formData.consent) newErrors.consent = 'You must agree to be contacted'
+    if (!formData.timeline) newErrors.timeline = 'Urgency level is required'
+    if (formData.interests.length === 0) newErrors.interests = 'Please select at least one compliance challenge'
+    if (!formData.consent) newErrors.consent = 'Consent is required for enterprise consultation'
 
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -310,7 +275,6 @@ const CannabisDemoForm: React.FC = () => {
     setSubmitError('')
 
     try {
-      // Sanitize form data
       const sanitizedData: CannabisDemoRequest = {
         ...formData,
         firstName: sanitizeCannabisInput(formData.firstName),
@@ -328,21 +292,20 @@ const CannabisDemoForm: React.FC = () => {
       if (result.success) {
         setIsSubmitted(true)
         
-        // Track successful demo request
-        trackCannabisEvent('cannabis_demo_request_submitted', {
+        trackCannabisEvent('enterprise_consultation_request_submitted', {
           business_type: formData.businessType,
-          state: formData.state,
           revenue: formData.monthlyRevenue,
-          timeline: formData.timeline,
-          interests: formData.interests,
+          urgency: formData.timeline,
+          challenges: formData.interests,
           lead_id: result.leadId,
+          lead_score: 'enterprise',
         })
       } else {
-        setSubmitError('Failed to submit demo request. Please try again or contact us directly.')
+        setSubmitError('Failed to submit consultation request. Please contact us directly at enterprise@cultivateco.com')
       }
     } catch (error) {
-      console.error('Demo form submission error:', error)
-      setSubmitError('An unexpected error occurred. Please try again.')
+      console.error('Enterprise consultation submission error:', error)
+      setSubmitError('An unexpected error occurred. Please contact enterprise@cultivateco.com directly.')
     } finally {
       setIsSubmitting(false)
     }
@@ -354,41 +317,45 @@ const CannabisDemoForm: React.FC = () => {
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="bg-white rounded-2xl shadow-cannabis p-8 text-center"
+        className="bg-white rounded-2xl shadow-lg p-8 text-center border border-teal-200"
       >
         <div className="space-y-6">
-          <div className="w-16 h-16 bg-cannabis-green-100 rounded-full flex items-center justify-center mx-auto">
-            <CheckCircle className="w-8 h-8 text-cannabis-green-600" />
+          <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto">
+            <CheckCircle className="w-8 h-8 text-teal-600" />
           </div>
           
           <div>
             <h3 className="text-2xl font-bold text-gray-900 mb-2">
-              Demo Request Received!
+              Enterprise Consultation Requested
             </h3>
             <p className="text-gray-600">
-              Thank you for your interest in CultivateCo. Our cannabis experts will contact you 
-              within 24 hours to schedule your personalized demo.
+              Our pharmaceutical-grade compliance experts will contact you within 4 business hours 
+              to schedule your confidential enterprise consultation.
             </p>
           </div>
 
-          <div className="bg-cannabis-green-50 rounded-lg p-6 space-y-4">
-            <h4 className="font-semibold text-cannabis-green-900">What happens next?</h4>
-            <div className="space-y-3 text-sm text-cannabis-green-800">
+          <div className="bg-teal-50 rounded-lg p-6 space-y-4 border border-teal-200">
+            <h4 className="font-semibold text-teal-900">Your Enterprise Consultation Process</h4>
+            <div className="space-y-3 text-sm text-teal-800">
               <div className="flex items-center space-x-3">
-                <div className="w-6 h-6 bg-cannabis-green-600 text-white rounded-full flex items-center justify-center text-xs font-bold">1</div>
-                <span>Cannabis specialist reviews your requirements</span>
+                <div className="w-6 h-6 bg-teal-600 text-white rounded-full flex items-center justify-center text-xs font-bold">1</div>
+                <span>Compliance expert reviews your enterprise requirements</span>
               </div>
               <div className="flex items-center space-x-3">
-                <div className="w-6 h-6 bg-cannabis-green-600 text-white rounded-full flex items-center justify-center text-xs font-bold">2</div>
-                <span>Personalized demo scheduled within 24 hours</span>
+                <div className="w-6 h-6 bg-teal-600 text-white rounded-full flex items-center justify-center text-xs font-bold">2</div>
+                <span>60-minute executive consultation scheduled (within 4 hours)</span>
               </div>
               <div className="flex items-center space-x-3">
-                <div className="w-6 h-6 bg-cannabis-green-600 text-white rounded-full flex items-center justify-center text-xs font-bold">3</div>
-                <span>Live demo of features relevant to your business</span>
+                <div className="w-6 h-6 bg-teal-600 text-white rounded-full flex items-center justify-center text-xs font-bold">3</div>
+                <span>Live demonstration of pharmaceutical-grade capabilities</span>
               </div>
               <div className="flex items-center space-x-3">
-                <div className="w-6 h-6 bg-cannabis-green-600 text-white rounded-full flex items-center justify-center text-xs font-bold">4</div>
-                <span>Custom pricing and implementation plan</span>
+                <div className="w-6 h-6 bg-teal-600 text-white rounded-full flex items-center justify-center text-xs font-bold">4</div>
+                <span>Custom ROI analysis and risk mitigation assessment</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <div className="w-6 h-6 bg-teal-600 text-white rounded-full flex items-center justify-center text-xs font-bold">5</div>
+                <span>Enterprise pricing proposal and implementation timeline</span>
               </div>
             </div>
           </div>
@@ -396,19 +363,27 @@ const CannabisDemoForm: React.FC = () => {
           <div className="flex flex-col sm:flex-row gap-4">
             <Link
               href="/platform"
-              className="flex-1 inline-flex items-center justify-center space-x-2 rounded-lg border-2 border-cannabis-green-600 px-6 py-3 text-cannabis-green-600 hover:bg-cannabis-green-50 transition-colors"
+              className="flex-1 inline-flex items-center justify-center space-x-2 rounded-lg border-2 border-teal-600 px-6 py-3 text-teal-600 hover:bg-teal-50 transition-colors"
             >
               <span>Explore Platform</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
             
             <Link
-              href="/resources"
-              className="flex-1 inline-flex items-center justify-center space-x-2 rounded-lg cannabis-gradient px-6 py-3 text-white hover:shadow-cannabis-lg transition-all duration-200"
+              href="/pricing"
+              className="flex-1 inline-flex items-center justify-center space-x-2 rounded-lg bg-teal-600 px-6 py-3 text-white hover:bg-teal-700 transition-colors"
             >
-              <span>Browse Resources</span>
-              <Download className="w-4 h-4" />
+              <span>Enterprise Pricing</span>
+              <DollarSign className="w-4 h-4" />
             </Link>
+          </div>
+
+          <div className="text-center pt-4 border-t border-gray-200">
+            <p className="text-sm text-gray-600 mb-2">Urgent compliance needs?</p>
+            <p className="text-sm">
+              <Phone className="inline w-4 h-4 mr-1" />
+              Call enterprise hotline: <span className="font-semibold text-teal-600">(555) 123-ENTERPRISE</span>
+            </p>
           </div>
         </div>
       </motion.div>
@@ -419,17 +394,36 @@ const CannabisDemoForm: React.FC = () => {
     <motion.form
       initial="hidden"
       animate="visible"
-      variants={staggerContainerVariants}
+      variants={{
+        hidden: { opacity: 0 },
+        visible: {
+          opacity: 1,
+          transition: {
+            staggerChildren: 0.1,
+            delayChildren: 0.2
+          }
+        }
+      }}
       onSubmit={handleSubmit}
-      className="bg-white rounded-2xl shadow-cannabis p-8 space-y-8"
+      className="bg-white rounded-2xl shadow-lg p-8 space-y-8 border border-teal-200"
     >
-      <motion.div variants={fadeInUpVariants} className="text-center">
+      <motion.div 
+        variants={{
+          hidden: { opacity: 0, y: 20 },
+          visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+        }}
+        className="text-center"
+      >
         <h2 className="text-3xl font-bold text-gray-900 mb-2">
-          Book Your Cannabis Demo
+          Schedule Enterprise Consultation
         </h2>
         <p className="text-gray-600">
-          See how CultivateCo can transform your cannabis operations in just 30 minutes.
+          Confidential 60-minute consultation on pharmaceutical-grade cannabis compliance for enterprise operations.
         </p>
+        <div className="mt-4 inline-flex items-center space-x-2 text-sm bg-teal-50 text-teal-800 px-4 py-2 rounded-full border border-teal-200">
+          <Shield className="w-4 h-4" />
+          <span>SOC 2 Type II Certified • Enterprise Security</span>
+        </div>
       </motion.div>
 
       {submitError && (
@@ -438,10 +432,16 @@ const CannabisDemoForm: React.FC = () => {
         </div>
       )}
 
-      {/* Personal Information */}
-      <motion.div variants={fadeInUpVariants} className="space-y-6">
+      {/* Executive Information */}
+      <motion.div 
+        variants={{
+          hidden: { opacity: 0, y: 20 },
+          visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+        }}
+        className="space-y-6"
+      >
         <h3 className="text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2">
-          Contact Information
+          Executive Contact Information
         </h3>
         
         <div className="grid md:grid-cols-2 gap-6">
@@ -454,10 +454,10 @@ const CannabisDemoForm: React.FC = () => {
               value={formData.firstName}
               onChange={(e) => handleInputChange('firstName', e.target.value)}
               className={cn(
-                'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-cannabis-green-500 focus:border-cannabis-green-500 transition-colors',
+                'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors',
                 errors.firstName ? 'border-red-300' : 'border-gray-300'
               )}
-              placeholder="Enter your first name"
+              placeholder="Executive first name"
             />
             {errors.firstName && <p className="mt-1 text-sm text-red-600">{errors.firstName}</p>}
           </div>
@@ -471,10 +471,10 @@ const CannabisDemoForm: React.FC = () => {
               value={formData.lastName}
               onChange={(e) => handleInputChange('lastName', e.target.value)}
               className={cn(
-                'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-cannabis-green-500 focus:border-cannabis-green-500 transition-colors',
+                'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors',
                 errors.lastName ? 'border-red-300' : 'border-gray-300'
               )}
-              placeholder="Enter your last name"
+              placeholder="Executive last name"
             />
             {errors.lastName && <p className="mt-1 text-sm text-red-600">{errors.lastName}</p>}
           </div>
@@ -488,24 +488,24 @@ const CannabisDemoForm: React.FC = () => {
               value={formData.email}
               onChange={(e) => handleInputChange('email', e.target.value)}
               className={cn(
-                'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-cannabis-green-500 focus:border-cannabis-green-500 transition-colors',
+                'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors',
                 errors.email ? 'border-red-300' : 'border-gray-300'
               )}
-              placeholder="you@company.com"
+              placeholder="executive@company.com"
             />
             {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Phone Number *
+              Direct Phone *
             </label>
             <input
               type="tel"
               value={formData.phone}
               onChange={(e) => handleInputChange('phone', e.target.value)}
               className={cn(
-                'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-cannabis-green-500 focus:border-cannabis-green-500 transition-colors',
+                'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors',
                 errors.phone ? 'border-red-300' : 'border-gray-300'
               )}
               placeholder="(555) 123-4567"
@@ -522,74 +522,60 @@ const CannabisDemoForm: React.FC = () => {
               value={formData.company}
               onChange={(e) => handleInputChange('company', e.target.value)}
               className={cn(
-                'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-cannabis-green-500 focus:border-cannabis-green-500 transition-colors',
+                'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors',
                 errors.company ? 'border-red-300' : 'border-gray-300'
               )}
-              placeholder="Your cannabis business name"
+              placeholder="Cannabis enterprise name"
             />
             {errors.company && <p className="mt-1 text-sm text-red-600">{errors.company}</p>}
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Your Title *
+              Executive Title *
             </label>
             <input
               type="text"
               value={formData.title}
               onChange={(e) => handleInputChange('title', e.target.value)}
               className={cn(
-                'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-cannabis-green-500 focus:border-cannabis-green-500 transition-colors',
+                'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors',
                 errors.title ? 'border-red-300' : 'border-gray-300'
               )}
-              placeholder="CEO, Owner, Manager, etc."
+              placeholder="CEO, COO, Chief Compliance Officer, etc."
             />
             {errors.title && <p className="mt-1 text-sm text-red-600">{errors.title}</p>}
           </div>
         </div>
       </motion.div>
 
-      {/* Business Information */}
-      <motion.div variants={fadeInUpVariants} className="space-y-6">
+      {/* Enterprise Operation Details */}
+      <motion.div 
+        variants={{
+          hidden: { opacity: 0, y: 20 },
+          visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+        }}
+        className="space-y-6"
+      >
         <h3 className="text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2">
-          Business Information
+          Enterprise Operation Details
         </h3>
         
         <div className="grid md:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              State *
-            </label>
-            <select
-              value={formData.state}
-              onChange={(e) => handleInputChange('state', e.target.value)}
-              className={cn(
-                'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-cannabis-green-500 focus:border-cannabis-green-500 transition-colors',
-                errors.state ? 'border-red-300' : 'border-gray-300'
-              )}
-            >
-              <option value="">Select your state</option>
-              {US_STATES.map(state => (
-                <option key={state} value={state}>{state}</option>
-              ))}
-            </select>
-            {errors.state && <p className="mt-1 text-sm text-red-600">{errors.state}</p>}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Business Type *
+              Enterprise Business Type *
             </label>
             <select
               value={formData.businessType}
               onChange={(e) => handleInputChange('businessType', e.target.value)}
               className={cn(
-                'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-cannabis-green-500 focus:border-cannabis-green-500 transition-colors',
+                'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors',
                 errors.businessType ? 'border-red-300' : 'border-gray-300'
               )}
             >
-              <option value="">Select business type</option>
-              {CANNABIS_BUSINESS_TYPES.map(type => (
+              <option value="">Select enterprise type</option>
+              {ENTERPRISE_BUSINESS_TYPES.map(type => (
                 <option key={type} value={type}>{type}</option>
               ))}
             </select>
@@ -598,18 +584,18 @@ const CannabisDemoForm: React.FC = () => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Monthly Revenue *
+              Annual Revenue Range *
             </label>
             <select
               value={formData.monthlyRevenue}
               onChange={(e) => handleInputChange('monthlyRevenue', e.target.value)}
               className={cn(
-                'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-cannabis-green-500 focus:border-cannabis-green-500 transition-colors',
+                'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors',
                 errors.monthlyRevenue ? 'border-red-300' : 'border-gray-300'
               )}
             >
               <option value="">Select revenue range</option>
-              {CANNABIS_MONTHLY_REVENUE_OPTIONS.map(option => (
+              {ENTERPRISE_REVENUE_OPTIONS.map(option => (
                 <option key={option} value={option}>{option}</option>
               ))}
             </select>
@@ -618,100 +604,118 @@ const CannabisDemoForm: React.FC = () => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Implementation Timeline *
+              Implementation Urgency *
             </label>
             <select
               value={formData.timeline}
               onChange={(e) => handleInputChange('timeline', e.target.value)}
               className={cn(
-                'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-cannabis-green-500 focus:border-cannabis-green-500 transition-colors',
+                'w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors',
                 errors.timeline ? 'border-red-300' : 'border-gray-300'
               )}
             >
-              <option value="">Select timeline</option>
-              {CANNABIS_TIMELINE_OPTIONS.map(option => (
+              <option value="">Select urgency level</option>
+              {ENTERPRISE_URGENCY_OPTIONS.map(option => (
                 <option key={option} value={option}>{option}</option>
               ))}
             </select>
             {errors.timeline && <p className="mt-1 text-sm text-red-600">{errors.timeline}</p>}
           </div>
-        </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Current Software (Optional)
-          </label>
-          <input
-            type="text"
-            value={formData.currentSoftware}
-            onChange={(e) => handleInputChange('currentSoftware', e.target.value)}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cannabis-green-500 focus:border-cannabis-green-500 transition-colors"
-            placeholder="What cannabis software do you currently use?"
-          />
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Current Compliance Solution
+            </label>
+            <input
+              type="text"
+              value={formData.currentSoftware}
+              onChange={(e) => handleInputChange('currentSoftware', e.target.value)}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors"
+              placeholder="Current software or manual processes"
+            />
+          </div>
         </div>
       </motion.div>
 
-      {/* Areas of Interest */}
-      <motion.div variants={fadeInUpVariants} className="space-y-6">
+      {/* Enterprise Compliance Challenges */}
+      <motion.div 
+        variants={{
+          hidden: { opacity: 0, y: 20 },
+          visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+        }}
+        className="space-y-6"
+      >
         <h3 className="text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2">
-          Areas of Interest *
+          Primary Compliance Challenges *
         </h3>
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
-          {CANNABIS_INTERESTS.map(interest => (
+          {ENTERPRISE_COMPLIANCE_CHALLENGES.map(challenge => (
             <label
-              key={interest}
+              key={challenge}
               className={cn(
                 'flex items-center space-x-3 p-3 border rounded-lg cursor-pointer transition-all duration-200',
-                formData.interests.includes(interest)
-                  ? 'border-cannabis-green-500 bg-cannabis-green-50'
-                  : 'border-gray-200 hover:border-cannabis-green-300'
+                formData.interests.includes(challenge)
+                  ? 'border-teal-500 bg-teal-50'
+                  : 'border-gray-200 hover:border-teal-300'
               )}
             >
               <input
                 type="checkbox"
-                checked={formData.interests.includes(interest)}
-                onChange={() => handleInterestToggle(interest)}
-                className="text-cannabis-green-600 focus:ring-cannabis-green-500"
+                checked={formData.interests.includes(challenge)}
+                onChange={() => handleChallengeToggle(challenge)}
+                className="text-teal-600 focus:ring-teal-500"
               />
-              <span className="text-sm font-medium text-gray-700">{interest}</span>
+              <span className="text-sm font-medium text-gray-700">{challenge}</span>
             </label>
           ))}
         </div>
         {errors.interests && <p className="mt-1 text-sm text-red-600">{errors.interests}</p>}
       </motion.div>
 
-      {/* Additional Information */}
-      <motion.div variants={fadeInUpVariants} className="space-y-6">
+      {/* Additional Details */}
+      <motion.div 
+        variants={{
+          hidden: { opacity: 0, y: 20 },
+          visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+        }}
+        className="space-y-6"
+      >
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Questions or Specific Needs (Optional)
+            Specific Compliance Requirements or Questions
           </label>
           <textarea
             value={formData.questions}
             onChange={(e) => handleInputChange('questions', e.target.value)}
             rows={4}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cannabis-green-500 focus:border-cannabis-green-500 transition-colors"
-            placeholder="Tell us about your specific cannabis compliance challenges or questions..."
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors"
+            placeholder="Describe your specific enterprise compliance challenges, regulatory deadlines, or pharmaceutical-grade requirements..."
           />
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Preferred Demo Time
+            Preferred Consultation Time
           </label>
           <input
             type="text"
             value={formData.preferredTime}
             onChange={(e) => handleInputChange('preferredTime', e.target.value)}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cannabis-green-500 focus:border-cannabis-green-500 transition-colors"
-            placeholder="e.g., Mornings, Afternoons, Specific days/times"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors"
+            placeholder="e.g., Weekday mornings, specific time zones, executive calendar availability"
           />
         </div>
       </motion.div>
 
       {/* Consent and Submit */}
-      <motion.div variants={fadeInUpVariants} className="space-y-6">
+      <motion.div 
+        variants={{
+          hidden: { opacity: 0, y: 20 },
+          visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+        }}
+        className="space-y-6"
+      >
         <div className="space-y-4">
           <label className="flex items-start space-x-3">
             <input
@@ -719,13 +723,14 @@ const CannabisDemoForm: React.FC = () => {
               checked={formData.consent}
               onChange={(e) => handleInputChange('consent', e.target.checked)}
               className={cn(
-                'mt-1 text-cannabis-green-600 focus:ring-cannabis-green-500',
+                'mt-1 text-teal-600 focus:ring-teal-500',
                 errors.consent ? 'border-red-300' : ''
               )}
             />
             <span className="text-sm text-gray-600">
-              I agree to be contacted by CultivateCo regarding my demo request and consent 
-              to receiving communications about cannabis compliance solutions. *
+              I authorize CultivateCo to contact me regarding enterprise cannabis compliance solutions 
+              and agree to confidential discussion of our compliance requirements and business operations. 
+              I understand this consultation is for qualified enterprise prospects only. *
             </span>
           </label>
           {errors.consent && <p className="ml-6 text-sm text-red-600">{errors.consent}</p>}
@@ -738,30 +743,30 @@ const CannabisDemoForm: React.FC = () => {
             'w-full inline-flex items-center justify-center space-x-2 rounded-lg px-8 py-4 text-lg font-semibold text-white transition-all duration-200',
             isSubmitting
               ? 'bg-gray-400 cursor-not-allowed'
-              : 'cannabis-gradient hover:shadow-cannabis-lg hover:scale-105'
+              : 'bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 hover:shadow-lg hover:scale-105'
           )}
         >
           {isSubmitting ? (
             <>
               <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-              <span>Submitting Demo Request...</span>
+              <span>Submitting Enterprise Request...</span>
             </>
           ) : (
             <>
               <Calendar className="h-5 w-5" />
-              <span>Book My Cannabis Demo</span>
+              <span>Schedule Enterprise Consultation</span>
             </>
           )}
         </button>
 
         <p className="text-center text-sm text-gray-500">
-          By submitting this form, you agree to our{' '}
-          <Link href="/privacy" className="text-cannabis-green-600 hover:underline">
+          By submitting, you agree to our{' '}
+          <Link href="/privacy" className="text-teal-600 hover:underline">
             Privacy Policy
           </Link>{' '}
           and{' '}
-          <Link href="/terms" className="text-cannabis-green-600 hover:underline">
-            Terms of Service
+          <Link href="/terms" className="text-teal-600 hover:underline">
+            Enterprise Terms
           </Link>
         </p>
       </motion.div>
@@ -770,13 +775,12 @@ const CannabisDemoForm: React.FC = () => {
 }
 
 // ============================================================================
-// CANNABIS DEMO PAGE SECTIONS
+// ENTERPRISE CONSULTATION PAGE SECTIONS
 // ============================================================================
 
-const CannabisDemoHeroSection: React.FC = () => {
+const EnterpriseConsultationHeroSection: React.FC = () => {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-cannabis-green-600 to-cannabis-blue-600 text-white py-20 lg:py-32">
-      {/* Cannabis Background Pattern */}
+    <section className="relative overflow-hidden bg-gradient-to-br from-teal-600 via-cyan-600 to-blue-600 text-white py-20 lg:py-32">
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-20 left-20 w-72 h-72 bg-white rounded-full blur-3xl" />
         <div className="absolute bottom-20 right-20 w-96 h-96 bg-white rounded-full blur-3xl" />
@@ -784,33 +788,61 @@ const CannabisDemoHeroSection: React.FC = () => {
 
       <div className="container relative mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Cannabis Demo Content */}
           <motion.div
             initial="hidden"
             animate="visible"
-            variants={staggerContainerVariants}
+            variants={{
+              hidden: { opacity: 0 },
+              visible: {
+                opacity: 1,
+                transition: {
+                  staggerChildren: 0.15,
+                  delayChildren: 0.2
+                }
+              }
+            }}
             className="space-y-8"
           >
-            <motion.div variants={fadeInUpVariants} className="space-y-6">
+            <motion.div 
+              variants={{
+                hidden: { opacity: 0, y: 60 },
+                visible: { 
+                  opacity: 1, 
+                  y: 0,
+                  transition: { duration: 0.6, ease: 'easeOut' }
+                }
+              }}
+              className="space-y-6"
+            >
               <div className="inline-flex items-center space-x-2 rounded-full bg-white/20 px-4 py-2 text-sm font-medium">
-                <Calendar className="h-4 w-4" />
-                <span>Personalized Cannabis Demo</span>
+                <Shield className="h-4 w-4" />
+                <span>Enterprise Cannabis Consultation</span>
               </div>
               
               <h1 className="text-4xl lg:text-6xl font-bold leading-tight">
-                See Cannabis
-                <span className="block">Compliance</span>
-                <span className="block">In Action</span>
+                Pharmaceutical-Grade
+                <span className="block">Cannabis Compliance</span>
+                <span className="block text-cyan-200">Consultation</span>
               </h1>
               
               <p className="text-xl opacity-90 leading-relaxed">
-                Watch how CultivateCo transforms cannabis operations with live compliance 
-                monitoring, seamless POS integration, and powerful analytics in just 30 minutes.
+                Exclusive 60-minute consultation for enterprise cannabis operations. See how pharmaceutical-grade 
+                compliance prevents $50K-$2M+ in regulatory fines while enabling banking partnerships and institutional investment.
               </p>
             </motion.div>
 
-            <motion.div variants={fadeInUpVariants} className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              {CANNABIS_DEMO_STATS.map((stat, index) => {
+            <motion.div 
+              variants={{
+                hidden: { opacity: 0, y: 60 },
+                visible: { 
+                  opacity: 1, 
+                  y: 0,
+                  transition: { duration: 0.6, ease: 'easeOut' }
+                }
+              }}
+              className="grid grid-cols-2 lg:grid-cols-4 gap-4"
+            >
+              {ENTERPRISE_CONSULTATION_STATS.map((stat, index) => {
                 const Icon = stat.icon
                 return (
                   <div key={stat.label} className="text-center">
@@ -822,23 +854,32 @@ const CannabisDemoHeroSection: React.FC = () => {
               })}
             </motion.div>
 
-            <motion.div variants={fadeInUpVariants} className="flex items-center space-x-4 text-sm">
+            <motion.div 
+              variants={{
+                hidden: { opacity: 0, y: 60 },
+                visible: { 
+                  opacity: 1, 
+                  y: 0,
+                  transition: { duration: 0.6, ease: 'easeOut' }
+                }
+              }}
+              className="flex items-center space-x-4 text-sm"
+            >
               <div className="flex items-center space-x-2">
                 <CheckCircle className="h-4 w-4" />
-                <span>No software installation</span>
+                <span>Confidential enterprise discussion</span>
               </div>
               <div className="flex items-center space-x-2">
                 <CheckCircle className="h-4 w-4" />
-                <span>Live Q&A with experts</span>
+                <span>Custom ROI analysis included</span>
               </div>
               <div className="flex items-center space-x-2">
                 <CheckCircle className="h-4 w-4" />
-                <span>Custom pricing included</span>
+                <span>Executive-level consultation</span>
               </div>
             </motion.div>
           </motion.div>
 
-          {/* Cannabis Demo Benefits */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -846,9 +887,9 @@ const CannabisDemoHeroSection: React.FC = () => {
             className="space-y-6"
           >
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 space-y-6">
-              <h2 className="text-2xl font-bold">What You'll See</h2>
+              <h2 className="text-2xl font-bold">Consultation Agenda</h2>
               
-              {CANNABIS_DEMO_BENEFITS.map((benefit, index) => {
+              {ENTERPRISE_CONSULTATION_BENEFITS.map((benefit, index) => {
                 const Icon = benefit.icon
                 return (
                   <div key={benefit.title} className="flex items-start space-x-4">
@@ -860,7 +901,10 @@ const CannabisDemoHeroSection: React.FC = () => {
                         <h3 className="font-semibold">{benefit.title}</h3>
                         <span className="text-sm opacity-75">{benefit.duration}</span>
                       </div>
-                      <p className="text-sm opacity-90">{benefit.description}</p>
+                      <p className="text-sm opacity-90 mb-2">{benefit.description}</p>
+                      <div className="text-xs bg-white/20 rounded px-2 py-1 inline-block">
+                        {benefit.riskMitigation}
+                      </div>
                     </div>
                   </div>
                 )
@@ -873,27 +917,42 @@ const CannabisDemoHeroSection: React.FC = () => {
   )
 }
 
-const CannabisTestimonialsSection: React.FC = () => {
+const EnterpriseTestimonialsSection: React.FC = () => {
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
   return (
-    <section ref={ref} className="py-20 lg:py-32 bg-cannabis-cream-50">
+    <section ref={ref} className="py-20 lg:py-32 bg-gray-50">
       <div className="container mx-auto px-4">
         <motion.div
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
-          variants={staggerContainerVariants}
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.15,
+                delayChildren: 0.2
+              }
+            }
+          }}
           className="text-center mb-16"
         >
-          <motion.div variants={fadeInUpVariants}>
+          <motion.div variants={{
+            hidden: { opacity: 0, y: 60 },
+            visible: { 
+              opacity: 1, 
+              y: 0,
+              transition: { duration: 0.6, ease: 'easeOut' }
+            }
+          }}>
             <h2 className="text-3xl lg:text-5xl font-bold text-gray-900 mb-6">
-              Demo Success
-              <span className="block text-cannabis-green-700">Stories</span>
+              Enterprise Consultation
+              <span className="block text-teal-700">Success Stories</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              See why cannabis operators choose CultivateCo after just one demo. 
-              Real results from real customers who saw the difference.
+              C-level executives share why they chose pharmaceutical-grade compliance after their enterprise consultation.
             </p>
           </motion.div>
         </motion.div>
@@ -901,60 +960,57 @@ const CannabisTestimonialsSection: React.FC = () => {
         <motion.div
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
-          variants={staggerContainerVariants}
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.15,
+                delayChildren: 0.2
+              }
+            }
+          }}
           className="grid lg:grid-cols-3 gap-8"
         >
-          {CANNABIS_DEMO_TESTIMONIALS.map((testimonial) => (
+          {ENTERPRISE_TESTIMONIALS.map((testimonial) => (
             <motion.div
               key={testimonial.id}
-              variants={scaleInVariants}
-              className="bg-white rounded-2xl p-8 shadow-cannabis hover:shadow-cannabis-lg transition-all duration-300"
+              variants={{
+                hidden: { opacity: 0, scale: 0.8 },
+                visible: { 
+                  opacity: 1, 
+                  scale: 1,
+                  transition: { duration: 0.5, ease: 'easeOut' }
+                }
+              }}
+              className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-teal-100"
             >
               <div className="space-y-6">
-                {/* Cannabis Rating Stars */}
                 <div className="flex space-x-1">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
                   ))}
                 </div>
 
-                {/* Cannabis Demo Testimonial */}
                 <blockquote className="text-gray-700 italic">
                   "{testimonial.quote}"
                 </blockquote>
 
-                {/* Cannabis Customer Info */}
                 <div className="flex items-center space-x-4">
-                  <div className="relative h-12 w-12 rounded-full overflow-hidden bg-cannabis-green-100">
-                    {testimonial.image ? (
-                      <Image
-                        src={testimonial.image}
-                        alt={testimonial.name}
-                        width={48}
-                        height={48}
-                        className="object-cover"
-                      />
-                    ) : (
-                      <div className="h-full w-full bg-cannabis-green-100 flex items-center justify-center">
-                        <Users className="h-6 w-6 text-cannabis-green-600" />
-                      </div>
-                    )}
+                  <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center">
+                    <Users className="w-6 h-6 text-teal-600" />
                   </div>
                   <div>
                     <div className="font-semibold text-gray-900">{testimonial.name}</div>
-                    <div className="text-sm text-gray-600">
-                      {testimonial.title}, {testimonial.company}
-                    </div>
-                    <div className="text-sm text-cannabis-green-600 font-medium">
-                      {testimonial.state}
-                    </div>
+                    <div className="text-sm text-gray-600">{testimonial.title}</div>
+                    <div className="text-sm text-gray-600">{testimonial.company}</div>
+                    <div className="text-sm text-teal-600 font-medium">{testimonial.state}</div>
                   </div>
                 </div>
 
-                {/* Cannabis Demo Badge */}
-                <div className="flex items-center space-x-2 text-sm text-cannabis-green-600">
+                <div className="flex items-center space-x-2 text-sm text-teal-600">
                   <Award className="h-4 w-4" />
-                  <span>Demo to Customer in 1 Day</span>
+                  <span>Consultation to Contract in 48 Hours</span>
                 </div>
               </div>
             </motion.div>
@@ -966,33 +1022,33 @@ const CannabisTestimonialsSection: React.FC = () => {
 }
 
 // ============================================================================
-// MAIN CANNABIS DEMO PAGE COMPONENT
+// MAIN ENTERPRISE CONSULTATION PAGE COMPONENT
 // ============================================================================
 
-const CannabisDemoPage: React.FC = () => {
+const EnterpriseConsultationPage: React.FC = () => {
   const seo: CannabisSEOData = {
-    title: 'Book Cannabis Demo | See CultivateCo Platform Live | Free 30-Minute Demo',
-    description: 'Book a free 30-minute demo of CultivateCo cannabis platform. See compliance monitoring, POS system, and analytics in action. Custom pricing included.',
+    title: 'Enterprise Cannabis Compliance Consultation | Pharmaceutical-Grade Cannabis Platform | CultivateCo',
+    description: 'Schedule confidential 60-minute enterprise consultation on pharmaceutical-grade cannabis compliance. SOC 2 certified platform prevents $50K-$2M+ in regulatory fines.',
     keywords: [
-      'cannabis demo',
-      'cannabis software demo',
-      'dispensary software demo',
-      'cannabis compliance demo',
-      'cannabis pos demo',
-      'metrc integration demo',
-      'book cannabis demo',
-      'cannabis platform demo',
-      'dispensary management demo',
-      'cannabis analytics demo',
+      'enterprise cannabis consultation',
+      'pharmaceutical-grade cannabis compliance',
+      'cannabis enterprise software demo',
+      'multi-state cannabis compliance',
+      'cannabis banking compliance',
+      'SOC 2 cannabis platform',
+      'institutional cannabis investors',
+      'cannabis compliance consultation',
+      'enterprise cannabis platform',
+      'pharmaceutical cannabis validation',
     ],
-    ogTitle: 'Book Free Cannabis Demo | See CultivateCo Platform Live',
-    ogDescription: 'Watch how CultivateCo transforms cannabis operations with live compliance monitoring, POS integration, and analytics in just 30 minutes.',
-    ogImage: 'https://cultivateco.com/og-cannabis-demo-booking.jpg',
+    ogTitle: 'Enterprise Cannabis Compliance Consultation | CultivateCo',
+    ogDescription: 'Exclusive consultation for enterprise cannabis operations. See how pharmaceutical-grade compliance prevents regulatory fines and enables banking partnerships.',
+    ogImage: 'https://cultivateco.com/og-enterprise-cannabis-consultation.jpg',
     structuredData: {
       '@context': 'https://schema.org',
       '@type': 'Service',
-      name: 'CultivateCo Cannabis Platform Demo',
-      description: 'Free 30-minute personalized demo of complete cannabis compliance platform',
+      name: 'Enterprise Cannabis Compliance Consultation',
+      description: '60-minute confidential consultation on pharmaceutical-grade cannabis compliance for enterprise operations',
       provider: {
         '@type': 'Organization',
         name: 'CultivateCo',
@@ -1001,85 +1057,87 @@ const CannabisDemoPage: React.FC = () => {
         '@type': 'Offer',
         price: '0',
         priceCurrency: 'USD',
-        description: 'Free 30-minute cannabis platform demo',
+        description: 'Confidential enterprise consultation with custom ROI analysis',
       },
     },
   }
 
   return (
     <CannabisLayout seo={seo}>
-      <CannabisDemoHeroSection />
+      <EnterpriseConsultationHeroSection />
       
       <section className="py-20 lg:py-32 bg-white">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-3 gap-12">
-            {/* Cannabis Demo Form */}
             <div className="lg:col-span-2">
-              <CannabisDemoForm />
+              <EnterpriseConsultationForm />
             </div>
 
-            {/* Cannabis Demo Info Sidebar */}
             <div className="space-y-8">
-              {/* Contact Info */}
-              <div className="bg-cannabis-cream-50 rounded-2xl p-6 space-y-4">
-                <h3 className="font-semibold text-gray-900 mb-4">Need Help?</h3>
+              {/* Enterprise Contact Info */}
+              <div className="bg-teal-50 rounded-2xl p-6 space-y-4 border border-teal-200">
+                <h3 className="font-semibold text-gray-900 mb-4">Enterprise Support</h3>
                 
                 <div className="space-y-3">
                   <div className="flex items-center space-x-3">
-                    <Phone className="h-5 w-5 text-cannabis-green-600" />
+                    <Phone className="h-5 w-5 text-teal-600" />
                     <div>
-                      <div className="font-medium text-gray-900">Call Us</div>
-                      <div className="text-sm text-gray-600">{formatCannabisPhone('(555) 123-CANN')}</div>
+                      <div className="font-medium text-gray-900">Enterprise Hotline</div>
+                      <div className="text-sm text-gray-600">(555) 123-ENTERPRISE</div>
                     </div>
                   </div>
                   
                   <div className="flex items-center space-x-3">
-                    <Mail className="h-5 w-5 text-cannabis-green-600" />
+                    <Mail className="h-5 w-5 text-teal-600" />
                     <div>
-                      <div className="font-medium text-gray-900">Email</div>
-                      <div className="text-sm text-gray-600">demo@cultivateco.com</div>
+                      <div className="font-medium text-gray-900">Executive Email</div>
+                      <div className="text-sm text-gray-600">enterprise@cultivateco.com</div>
                     </div>
                   </div>
                   
                   <div className="flex items-center space-x-3">
-                    <Clock className="h-5 w-5 text-cannabis-green-600" />
+                    <Clock className="h-5 w-5 text-teal-600" />
                     <div>
-                      <div className="font-medium text-gray-900">Business Hours</div>
-                      <div className="text-sm text-gray-600">Mon-Fri 8AM-6PM MT</div>
+                      <div className="font-medium text-gray-900">Consultation Hours</div>
+                      <div className="text-sm text-gray-600">Mon-Fri 7AM-7PM MT</div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Demo Benefits */}
-              <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-4">
-                <h3 className="font-semibold text-gray-900 mb-4">Demo Benefits</h3>
+              {/* Enterprise Benefits */}
+              <div className="bg-white rounded-2xl border-2 border-teal-200 p-6 space-y-4">
+                <h3 className="font-semibold text-gray-900 mb-4">Consultation Includes</h3>
                 
                 <div className="space-y-3">
                   {[
-                    'Live platform walkthrough',
-                    'Custom ROI calculation',
-                    'Implementation timeline',
-                    'Personalized pricing',
-                    'Q&A with cannabis experts',
-                    'Integration planning',
+                    'Live pharmaceutical-grade platform demonstration',
+                    'Custom ROI and risk mitigation analysis',
+                    'Multi-state compliance strategy session',
+                    'Banking partnership readiness assessment',
+                    'Implementation timeline and resource planning',
+                    'Enterprise pricing proposal',
+                    'Dedicated compliance officer introduction',
+                    'Executive references and case studies',
                   ].map((benefit, index) => (
                     <div key={index} className="flex items-center space-x-3">
-                      <CheckCircle className="h-4 w-4 text-cannabis-green-500 flex-shrink-0" />
+                      <CheckCircle className="h-4 w-4 text-teal-500 flex-shrink-0" />
                       <span className="text-sm text-gray-700">{benefit}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* Security Badge */}
-              <div className="bg-gray-50 rounded-2xl p-6 text-center space-y-3">
-                <Shield className="h-8 w-8 text-cannabis-green-600 mx-auto" />
-                <div className="text-sm font-medium text-gray-900">
-                  SOC 2 Compliant & Cannabis Secure
+              {/* Risk Protection Value */}
+              <div className="bg-gradient-to-br from-teal-600 to-cyan-600 text-white rounded-2xl p-6 space-y-3">
+                <Shield className="h-8 w-8 mx-auto" />
+                <div className="text-center">
+                  <div className="text-2xl font-bold">$1.65M</div>
+                  <div className="text-sm opacity-90">Average Annual Risk Protection</div>
                 </div>
-                <div className="text-xs text-gray-600">
-                  Your data is protected with bank-level security
+                <div className="text-xs text-center opacity-75">
+                  Pharmaceutical-grade compliance prevents regulatory fines, 
+                  enables banking partnerships, and protects enterprise operations
                 </div>
               </div>
             </div>
@@ -1087,9 +1145,9 @@ const CannabisDemoPage: React.FC = () => {
         </div>
       </section>
 
-      <CannabisTestimonialsSection />
+      <EnterpriseTestimonialsSection />
     </CannabisLayout>
   )
 }
 
-export default CannabisDemoPage
+export default EnterpriseConsultationPage
