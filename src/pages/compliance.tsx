@@ -1,657 +1,631 @@
-import { NextPage } from 'next'
-import Head from 'next/head'
-import Link from 'next/link'
+/**
+ * =============================================================================
+ * CultivateCo Enterprise Cannabis Compliance Page
+ * =============================================================================
+ * Pharmaceutical-grade cannabis compliance for enterprise operations
+ */
+
+'use client'
+
 import { useState, useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
-import Image from 'next/image'
-import { 
-  Shield, FileCheck, AlertTriangle, CheckCircle, ArrowRight, Phone, Award,
-  BarChart3, Users, Building2, Globe, Eye, UserCheck, Lock, RefreshCw,
-  Bell, Activity, Target, TrendingUp, Clock, Database, Settings, Star,
-  AlertCircle, Zap, Monitor, Network, Key, Layers, Server, FileText,
-  Play, Download, ExternalLink, MapPin, Calendar, DollarSign
+import Link from 'next/link'
+import {
+  Shield,
+  AlertTriangle,
+  CheckCircle,
+  BarChart3,
+  Globe,
+  Lock,
+  Eye,
+  FileText,
+  TrendingUp,
+  Users,
+  Building2,
+  Award,
+  Clock,
+  DollarSign,
+  ArrowRight,
+  Play,
+  Star,
 } from 'lucide-react'
-import { CannabisLayout } from '@/components/layout/CannabisLayout'
-import { 
-  cn, 
-  trackCannabisEvent, 
-  formatComplianceScore,
-  formatCannabisRevenue,
-} from '@/lib/cannabis-utils'
-import type { 
-  CannabisSEOData, 
-  CannabisTestimonial,
-  CannabisStateInfo,
-} from '@/types/cannabis-marketing'
 
-const CompliancePage: NextPage = () => {
-  const [activeCompliance, setActiveCompliance] = useState('monitoring')
+import { CannabisLayout } from '@/components/layout/CannabisLayout'
+
+// ============================================================================
+// ENTERPRISE COMPLIANCE DATA
+// ============================================================================
+
+const ENTERPRISE_COMPLIANCE_FEATURES = [
+  {
+    icon: Eye,
+    title: 'Real-Time Monitoring',
+    description: 'AI-powered predictive analytics with 24/7 continuous monitoring and <5 minute alert response times.',
+    benefits: ['95% violation reduction', 'Predictive compliance alerts', 'Real-time regulatory tracking'],
+    riskMitigation: 'Prevents $50K-$500K in regulatory fines'
+  },
+  {
+    icon: Shield,
+    title: 'Pharmaceutical Validation',
+    description: 'IQ/OQ/PQ documentation framework with FDA-style protocols and change control management.',
+    benefits: ['Complete audit trails', 'Validation documentation', 'Change control workflows'],
+    riskMitigation: 'Supports $500K-$5M license protection'
+  },
+  {
+    icon: Globe,
+    title: 'Multi-State Management',
+    description: 'Unified platform across 15+ states with 80% efficiency improvement and centralized reporting.',
+    benefits: ['Cross-jurisdictional compliance', 'Unified reporting', 'State-specific automation'],
+    riskMitigation: 'Eliminates $50K-$200K compliance overhead'
+  },
+  {
+    icon: Lock,
+    title: 'Banking Compliance',
+    description: 'BSA/AML ready with KYC verification, transaction monitoring, and FinCEN reporting automation.',
+    benefits: ['Real-time transaction monitoring', 'Automated compliance reporting', 'Banking partnership ready'],
+    riskMitigation: 'Enables $200K-$2M banking relationships'
+  },
+]
+
+const COMPLIANCE_STATS = [
+  { label: 'Compliance Violations Prevented', value: '10K+', icon: Shield },
+  { label: 'Average Annual Risk Protection', value: '$1.65M', icon: DollarSign },
+  { label: 'Multi-State Operators Protected', value: '50+', icon: Globe },
+  { label: 'Regulatory Updates Tracked', value: '500+', icon: TrendingUp },
+]
+
+const RISK_CATEGORIES = [
+  {
+    category: 'Regulatory Violations',
+    description: 'License revocation, operating violations, and compliance failures',
+    averageCost: '$500K - $5M',
+    frequency: 'High',
+    mitigation: 'Real-time monitoring and predictive alerts'
+  },
+  {
+    category: 'Financial Penalties',
+    description: 'Regulatory fines, tax penalties, and compliance-related costs',
+    averageCost: '$50K - $2M',
+    frequency: 'Medium',
+    mitigation: 'Automated reporting and audit trail management'
+  },
+  {
+    category: 'Operational Disruption',
+    description: 'Business interruption, system failures, and process inefficiencies',
+    averageCost: '$25K - $500K',
+    frequency: 'Medium',
+    mitigation: '99.99% uptime SLA and enterprise infrastructure'
+  },
+  {
+    category: 'Banking Restrictions',
+    description: 'Loss of banking services, cash handling costs, and payment limitations',
+    averageCost: '$100K - $1M',
+    frequency: 'High',
+    mitigation: 'BSA/AML compliance and banking partnership support'
+  },
+]
+
+const ENTERPRISE_TESTIMONIALS = [
+  {
+    id: '1',
+    name: 'Dr. Sarah Martinez',
+    title: 'Chief Compliance Officer',
+    company: 'Verde Holdings (12 States)',
+    quote: 'CultivateCo transformed our multi-state compliance from constant crisis management to predictive prevention. We\'ve eliminated 95% of our violation risks.',
+    rating: 5,
+    savings: '$2.5M annual risk reduction'
+  },
+  {
+    id: '2',
+    name: 'Michael Chen',
+    title: 'CEO',
+    company: 'Pacific Cannabis Group',
+    quote: 'The pharmaceutical-grade validation was crucial for our Series B. Our institutional investors required SOC 2 certification and got complete confidence.',
+    rating: 5,
+    savings: '$50M funding round completed'
+  },
+  {
+    id: '3',
+    name: 'Jennifer Kim',
+    title: 'VP Regulatory Affairs',
+    company: 'Rocky Mountain Cannabis',
+    quote: 'Banking partnerships became possible once we demonstrated pharmaceutical-grade compliance. CultivateCo made the impossible achievable.',
+    rating: 5,
+    savings: '$1.2M banking relationship established'
+  },
+]
+
+// ============================================================================
+// COMPLIANCE PAGE SECTIONS
+// ============================================================================
+
+const ComplianceHeroSection: React.FC = () => {
+  return (
+    <section className="relative overflow-hidden bg-gradient-to-br from-teal-600 via-cyan-600 to-blue-600 text-white py-20 lg:py-32">
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute top-20 left-20 w-72 h-72 bg-white rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-white rounded-full blur-3xl" />
+      </div>
+
+      <div className="container relative mx-auto px-4">
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.15,
+                delayChildren: 0.2
+              }
+            }
+          }}
+          className="text-center max-w-4xl mx-auto space-y-8"
+        >
+          <motion.div 
+            variants={{
+              hidden: { opacity: 0, y: 60 },
+              visible: { 
+                opacity: 1, 
+                y: 0,
+                transition: { duration: 0.6, ease: 'easeOut' }
+              }
+            }}
+            className="space-y-6"
+          >
+            <div className="inline-flex items-center space-x-2 rounded-full bg-white/20 px-4 py-2 text-sm font-medium">
+              <Shield className="h-4 w-4" />
+              <span>Enterprise Cannabis Compliance</span>
+            </div>
+            
+            <h1 className="text-4xl lg:text-6xl font-bold leading-tight">
+              Pharmaceutical-Grade
+              <span className="block text-cyan-200">Cannabis Compliance</span>
+            </h1>
+            
+            <p className="text-xl opacity-90 leading-relaxed max-w-3xl mx-auto">
+              Prevent $50K-$2M+ in regulatory fines with enterprise compliance designed for multi-state operators. 
+              SOC 2 Type II certified platform with pharmaceutical validation and banking compliance.
+            </p>
+          </motion.div>
+
+          <motion.div 
+            variants={{
+              hidden: { opacity: 0, y: 60 },
+              visible: { 
+                opacity: 1, 
+                y: 0,
+                transition: { duration: 0.6, ease: 'easeOut' }
+              }
+            }}
+            className="grid grid-cols-2 lg:grid-cols-4 gap-8"
+          >
+            {COMPLIANCE_STATS.map((stat, index) => {
+              const Icon = stat.icon
+              return (
+                <div key={stat.label} className="text-center">
+                  <Icon className="h-8 w-8 mx-auto mb-3 opacity-75" />
+                  <div className="text-3xl font-bold">{stat.value}</div>
+                  <div className="text-sm opacity-75">{stat.label}</div>
+                </div>
+              )
+            })}
+          </motion.div>
+
+          <motion.div 
+            variants={{
+              hidden: { opacity: 0, y: 60 },
+              visible: { 
+                opacity: 1, 
+                y: 0,
+                transition: { duration: 0.6, ease: 'easeOut' }
+              }
+            }}
+            className="flex flex-col sm:flex-row gap-4 justify-center"
+          >
+            <Link
+              href="/demo"
+              className="inline-flex items-center space-x-2 rounded-lg bg-white px-8 py-4 text-lg font-semibold text-teal-600 hover:bg-gray-50 transition-colors"
+            >
+              <span>Enterprise Consultation</span>
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+            
+            <Link
+              href="/platform"
+              className="inline-flex items-center space-x-2 rounded-lg border-2 border-white px-8 py-4 text-lg font-semibold text-white hover:bg-white/10 transition-colors"
+            >
+              <span>Platform Demo</span>
+              <Play className="w-5 h-5" />
+            </Link>
+          </motion.div>
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
+const ComplianceFeaturesSection: React.FC = () => {
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
-  const complianceStats = [
-    { label: 'Violations Prevented', value: '25,000+', icon: Shield },
-    { label: 'Compliance Score', value: '99.99%', icon: Award },
-    { label: 'Multi-State Operators', value: '50+', icon: Building2 },
-    { label: 'Real-Time Monitoring', value: '24/7', icon: Activity }
-  ]
-
-  const complianceFeatures = [
-    {
-      id: 'monitoring',
-      icon: Eye,
-      title: 'Real-Time Compliance Monitoring',
-      subtitle: 'AI-Powered Violation Prevention',
-      description: 'Pharmaceutical-grade compliance monitoring with predictive analytics, real-time alerts, and automated violation prevention across all cannabis operations.',
-      image: '/compliance/enterprise-monitoring-dashboard.jpg',
-      features: [
-        'AI-powered predictive compliance analytics',
-        'Real-time violation detection and prevention',
-        'Automated regulatory change monitoring',
-        'Cross-jurisdictional compliance tracking',
-        'Continuous audit trail generation',
-        'Intelligent risk assessment scoring',
-        'Automated compliance reporting workflows',
-        'Executive compliance dashboard and alerts'
-      ],
-      benefits: [
-        { metric: '95%', description: 'Violation reduction' },
-        { metric: '<5 min', description: 'Alert response time' },
-        { metric: '24/7', description: 'Continuous monitoring' }
-      ],
-      riskMitigation: '$50,000 - $2M+ in potential fines prevented annually'
-    },
-    {
-      id: 'validation',
-      icon: FileCheck,
-      title: 'Pharmaceutical-Grade Validation',
-      subtitle: 'IQ/OQ/PQ Documentation & Change Control',
-      description: 'Complete validation framework following pharmaceutical industry standards with installation, operational, and performance qualification documentation.',
-      image: '/compliance/pharmaceutical-validation.jpg',
-      features: [
-        'Installation Qualification (IQ) documentation',
-        'Operational Qualification (OQ) testing protocols',
-        'Performance Qualification (PQ) validation',
-        'Change control and deviation management',
-        'ALCOA+ data integrity compliance',
-        'Electronic signature and audit trails',
-        'Validation master plan development',
-        'Risk-based validation approaches'
-      ],
-      benefits: [
-        { metric: '100%', description: 'Audit readiness' },
-        { metric: 'FDA-Style', description: 'Validation protocols' },
-        { metric: '21 CFR 11', description: 'Compliant records' }
-      ],
-      riskMitigation: 'Federal legalization and export readiness preparation'
-    },
-    {
-      id: 'multistate',
-      icon: Globe,
-      title: 'Multi-State Compliance Management',
-      subtitle: 'Unified Compliance Across Jurisdictions',
-      description: 'Comprehensive multi-state compliance platform that manages regulatory requirements across all operating jurisdictions with unified reporting and control.',
-      image: '/compliance/multistate-operations.jpg',
-      features: [
-        'State-specific regulatory framework mapping',
-        'Automated compliance rule engine updates',
-        'Cross-jurisdictional reporting capabilities',
-        'Multi-state license management and tracking',
-        'Unified audit trail across all locations',
-        'Regulatory intelligence and change alerts',
-        'Executive compliance reporting dashboards',
-        'Standardized operating procedures (SOPs)'
-      ],
-      benefits: [
-        { metric: '15+', description: 'States supported' },
-        { metric: '80%', description: 'Efficiency improvement' },
-        { metric: '1', description: 'Unified platform' }
-      ],
-      riskMitigation: 'Eliminates compliance gaps in multi-state operations'
-    },
-    {
-      id: 'banking',
-      icon: Lock,
-      title: 'Banking & Financial Compliance',
-      subtitle: 'BSA/AML Ready for Financial Partnerships',
-      description: 'Advanced financial compliance framework designed for cannabis banking partnerships, institutional investors, and regulatory financial reporting.',
-      image: '/compliance/banking-compliance.jpg',
-      features: [
-        'BSA/AML transaction monitoring integration',
-        'Know Your Customer (KYC) verification workflows',
-        'Suspicious Activity Report (SAR) automation',
-        'Currency Transaction Report (CTR) generation',
-        'Enhanced Due Diligence (EDD) procedures',
-        'FinCEN compliance reporting automation',
-        'Financial institution API integrations',
-        'Institutional audit trail requirements'
-      ],
-      benefits: [
-        { metric: '100%', description: 'Transaction monitoring' },
-        { metric: '<2 hrs', description: 'Compliance response' },
-        { metric: 'Bank-Ready', description: 'Partnership enabler' }
-      ],
-      riskMitigation: 'Enables banking relationships and institutional investment'
-    }
-  ]
-
-  const complianceROI = [
-    {
-      category: 'Violation Prevention',
-      annualSavings: '$750,000',
-      description: 'Average savings from prevented regulatory violations and fines'
-    },
-    {
-      category: 'Operational Efficiency',
-      annualSavings: '$300,000',
-      description: 'Reduced manual compliance work and audit preparation time'
-    },
-    {
-      category: 'Banking Access',
-      annualSavings: '$400,000',
-      description: 'Reduced cash handling costs and improved financial operations'
-    },
-    {
-      category: 'Investor Readiness',
-      annualSavings: '$200,000',
-      description: 'Faster due diligence and reduced legal/consulting fees'
-    }
-  ]
-
-  const testimonials = [
-    {
-      name: 'Dr. Sarah Martinez',
-      title: 'Chief Compliance Officer',
-      company: 'Verde Holdings (12 States)',
-      quote: 'CultivateCo\'s pharmaceutical-grade compliance approach eliminated our regulatory stress completely. We\'ve had zero violations across 12 states for 18 months straight.',
-      avatar: '/testimonials/sarah-martinez.jpg',
-      compliance_score: '100%',
-      states: 12
-    },
-    {
-      name: 'Marcus Thompson',
-      title: 'VP of Regulatory Affairs',
-      company: 'Golden State Cannabis',
-      quote: 'The banking compliance features enabled our first institutional banking relationship. Our Series B investors were impressed with our compliance documentation.',
-      avatar: '/testimonials/marcus-thompson.jpg',
-      compliance_score: '99.8%',
-      states: 3
-    },
-    {
-      name: 'Jennifer Kim',
-      title: 'Director of Operations',
-      company: 'Rocky Mountain Dispensary',
-      quote: 'Multi-state compliance used to require separate systems for each state. Now we have one unified platform that handles everything seamlessly.',
-      avatar: '/testimonials/jennifer-kim.jpg',
-      compliance_score: '99.9%',
-      states: 5
-    }
-  ]
-
-  // Animation variants
-  const fadeInUpVariants = {
-    hidden: { opacity: 0, y: 60 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { duration: 0.6, ease: 'easeOut' }
-    }
-  }
-
-  const staggerContainerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.2
-      }
-    }
-  }
-
-  const scaleInVariants = {
-    hidden: { opacity: 0, scale: 0.8 },
-    visible: { 
-      opacity: 1, 
-      scale: 1,
-      transition: { duration: 0.5, ease: 'easeOut' }
-    }
-  }
-
-  const handleDemoClick = () => {
-    trackCannabisEvent('cannabis_compliance_demo_click', {
-      source: 'compliance_hero',
-      button_text: 'Schedule Compliance Demo'
-    })
-  }
-
-  const handleVideoPlay = () => {
-    trackCannabisEvent('cannabis_compliance_video_play', {
-      source: 'compliance_hero',
-      video_type: 'compliance_overview'
-    })
-  }
-
-  const seoData: CannabisSEOData = {
-    title: 'Enterprise Cannabis Compliance | Pharmaceutical-Grade Validation | CultivateCo',
-    description: 'Pharmaceutical-grade cannabis compliance with SOC 2 Type II certification, real-time monitoring, and banking compliance. Prevent $50K-$2M+ in regulatory fines.',
-    ogImage: '/compliance/og-enterprise-compliance.jpg',
-  }
-
   return (
-    <CannabisLayout seoData={seoData}>
-      <Head>
-        <title>Enterprise Cannabis Compliance | Pharmaceutical-Grade Validation | CultivateCo</title>
-        <meta name="description" content="Pharmaceutical-grade cannabis compliance with SOC 2 Type II certification, real-time monitoring, and banking compliance. Prevent $50K-$2M+ in regulatory fines." />
-        <meta property="og:title" content="Enterprise Cannabis Compliance - CultivateCo" />
-        <meta property="og:description" content="The only pharmaceutical-grade cannabis compliance platform. Real-time monitoring, multi-state management, and banking compliance." />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Head>
-
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-teal-600 via-cyan-600 to-blue-600 text-white py-20 lg:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-black opacity-20"></div>
-        
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8">
-              <div className="space-y-6">
-                <div className="inline-flex items-center space-x-2 rounded-full bg-white/10 backdrop-blur-sm px-6 py-3 text-sm font-medium border border-white/20">
-                  <Shield className="h-4 w-4" />
-                  <span>Pharmaceutical-Grade Cannabis Compliance</span>
-                </div>
-                
-                <h1 className="text-4xl lg:text-6xl font-bold leading-tight">
-                  Enterprise Cannabis
-                  <span className="block text-cyan-200">Compliance Platform</span>
-                </h1>
-                
-                <p className="text-xl lg:text-2xl text-white/90 leading-relaxed">
-                  The only cannabis compliance platform built to pharmaceutical standards. Real-time monitoring, 
-                  multi-state management, and banking compliance that prevents $50,000 - $2M+ in regulatory fines.
-                </p>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-6 text-sm">
-                <div className="flex items-center space-x-2">
-                  <Award className="h-5 w-5" />
-                  <span>99.99% Compliance Score</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Eye className="h-5 w-5" />
-                  <span>Real-Time Monitoring</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Lock className="h-5 w-5" />
-                  <span>Banking Compliance Ready</span>
-                </div>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link href="/demo" className="inline-flex items-center justify-center px-8 py-4 bg-white text-teal-700 font-semibold rounded-lg hover:bg-white/90 transition-colors">
-                  Schedule Compliance Demo
-                  <ArrowRight className="ml-2 w-5 h-5" />
-                </Link>
-                <Link href="/contact" className="inline-flex items-center justify-center px-8 py-4 border-2 border-white text-white font-semibold rounded-lg hover:bg-white/10 transition-colors">
-                  Speak with Expert
-                  <Phone className="ml-2 w-5 h-5" />
-                </Link>
-              </div>
-            </div>
-
-            <div className="relative">
-              <div className="bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 p-8">
-                <div className="grid grid-cols-2 gap-6">
-                  {complianceStats.map((stat) => {
-                    const Icon = stat.icon
-                    return (
-                      <div key={stat.label} className="text-center">
-                        <Icon className="w-8 h-8 mx-auto mb-3 text-cyan-200" />
-                        <div className="text-2xl font-bold text-white">{stat.value}</div>
-                        <div className="text-sm text-white/80">{stat.label}</div>
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Risk Mitigation Value */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              The True Cost of Cannabis Compliance Failures
+    <section ref={ref} className="py-20 lg:py-32 bg-white">
+      <div className="container mx-auto px-4">
+        <motion.div
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.15,
+                delayChildren: 0.2
+              }
+            }
+          }}
+          className="text-center mb-16"
+        >
+          <motion.div variants={{
+            hidden: { opacity: 0, y: 60 },
+            visible: { 
+              opacity: 1, 
+              y: 0,
+              transition: { duration: 0.6, ease: 'easeOut' }
+            }
+          }}>
+            <h2 className="text-3xl lg:text-5xl font-bold text-gray-900 mb-6">
+              Enterprise Compliance
+              <span className="block text-teal-700">Capabilities</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Basic cannabis software leaves enterprises exposed to massive regulatory, financial, and operational risks. 
-              Pharmaceutical-grade compliance prevents these costly failures.
+              Comprehensive pharmaceutical-grade compliance platform designed for multi-state operators 
+              requiring institutional investor confidence and banking partnerships.
             </p>
-          </div>
+          </motion.div>
+        </motion.div>
 
-          <div className="grid md:grid-cols-4 gap-6 mb-12">
-            <div className="text-center p-6 bg-red-50 rounded-xl border border-red-200">
-              <AlertTriangle className="w-12 h-12 mx-auto mb-4 text-red-600" />
-              <div className="text-2xl font-bold text-red-600 mb-2">$2M+</div>
-              <div className="text-gray-900 font-semibold mb-1">License Revocation</div>
-              <div className="text-sm text-gray-600">Maximum regulatory penalty</div>
-            </div>
-            <div className="text-center p-6 bg-orange-50 rounded-xl border border-orange-200">
-              <Building2 className="w-12 h-12 mx-auto mb-4 text-orange-600" />
-              <div className="text-2xl font-bold text-orange-600 mb-2">$1M+</div>
-              <div className="text-gray-900 font-semibold mb-1">Banking Loss</div>
-              <div className="text-sm text-gray-600">Cash handling costs annually</div>
-            </div>
-            <div className="text-center p-6 bg-yellow-50 rounded-xl border border-yellow-200">
-              <Clock className="w-12 h-12 mx-auto mb-4 text-yellow-600" />
-              <div className="text-2xl font-bold text-yellow-600 mb-2">$500K+</div>
-              <div className="text-gray-900 font-semibold mb-1">Manual Overhead</div>
-              <div className="text-sm text-gray-600">Annual compliance labor costs</div>
-            </div>
-            <div className="text-center p-6 bg-teal-50 rounded-xl border border-teal-200">
-              <Shield className="w-12 h-12 mx-auto mb-4 text-teal-600" />
-              <div className="text-2xl font-bold text-teal-600 mb-2">$1.65M</div>
-              <div className="text-gray-900 font-semibold mb-1">Total Protection</div>
-              <div className="text-sm text-gray-600">Average annual risk mitigation</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Core Compliance Features */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Pharmaceutical-Grade Compliance Capabilities
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Enterprise compliance features designed for multi-state operators, institutional investors, 
-              and cannabis businesses demanding the highest regulatory standards.
-            </p>
-          </div>
-
-          {/* Feature Navigation */}
-          <div className="flex flex-wrap justify-center gap-4 mb-12">
-            {complianceFeatures.map((feature) => {
-              const Icon = feature.icon
-              return (
-                <button
-                  key={feature.id}
-                  onClick={() => setActiveCompliance(feature.id)}
-                  className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-medium transition-colors ${
-                    activeCompliance === feature.id
-                      ? 'bg-teal-600 text-white'
-                      : 'bg-white text-gray-700 hover:bg-gray-100 shadow-sm'
-                  }`}
-                >
-                  <Icon className="w-5 h-5" />
-                  <span>{feature.title.split(' ')[0]} {feature.title.split(' ')[1]}</span>
-                </button>
-              )
-            })}
-          </div>
-
-          {/* Active Feature Display */}
-          {complianceFeatures.map((feature) => {
-            if (feature.id !== activeCompliance) return null
+        <motion.div
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.15,
+                delayChildren: 0.2
+              }
+            }
+          }}
+          className="grid lg:grid-cols-2 gap-8"
+        >
+          {ENTERPRISE_COMPLIANCE_FEATURES.map((feature, index) => {
             const Icon = feature.icon
-
             return (
-              <div key={feature.id} className="grid lg:grid-cols-2 gap-12 items-center">
-                <div className="space-y-8">
-                  <div className="space-y-6">
-                    <div className="inline-flex items-center space-x-2 rounded-full bg-teal-100 px-4 py-2 text-sm font-medium text-teal-800">
-                      <Icon className="h-4 w-4" />
-                      <span>{feature.subtitle}</span>
+              <motion.div
+                key={feature.title}
+                variants={{
+                  hidden: { opacity: 0, scale: 0.8 },
+                  visible: { 
+                    opacity: 1, 
+                    scale: 1,
+                    transition: { duration: 0.5, ease: 'easeOut' }
+                  }
+                }}
+                className="bg-gray-50 rounded-2xl p-8 hover:shadow-lg transition-all duration-300"
+              >
+                <div className="space-y-6">
+                  <div className="flex items-center space-x-4">
+                    <div className="bg-teal-100 rounded-lg p-3">
+                      <Icon className="h-6 w-6 text-teal-600" />
                     </div>
-                    
-                    <h3 className="text-3xl lg:text-4xl font-bold text-gray-900">
-                      {feature.title}
-                    </h3>
-                    
-                    <p className="text-xl text-gray-600 leading-relaxed">
-                      {feature.description}
-                    </p>
+                    <h3 className="text-xl font-semibold text-gray-900">{feature.title}</h3>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-4">
-                    {feature.benefits.map((benefit, index) => (
-                      <div key={index} className="text-center p-4 rounded-lg bg-white shadow-sm">
-                        <div className="text-2xl font-bold text-teal-600 mb-1">
-                          {benefit.metric}
-                        </div>
-                        <div className="text-sm text-gray-600">{benefit.description}</div>
-                      </div>
-                    ))}
+                  <p className="text-gray-600">{feature.description}</p>
+
+                  <div className="space-y-3">
+                    <h4 className="font-medium text-gray-900">Key Benefits:</h4>
+                    <ul className="space-y-2">
+                      {feature.benefits.map((benefit, idx) => (
+                        <li key={idx} className="flex items-center space-x-2 text-sm text-gray-700">
+                          <CheckCircle className="h-4 w-4 text-teal-500 flex-shrink-0" />
+                          <span>{benefit}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
 
-                  <div className="grid md:grid-cols-2 gap-3">
-                    {feature.features.map((featureItem, index) => (
-                      <div key={index} className="flex items-start space-x-3">
-                        <CheckCircle className="w-5 h-5 mt-0.5 text-teal-500 flex-shrink-0" />
-                        <span className="text-gray-700">{featureItem}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="bg-teal-50 border border-teal-200 rounded-lg p-6">
-                    <div className="flex items-start space-x-3">
-                      <Shield className="w-6 h-6 text-teal-600 flex-shrink-0 mt-1" />
-                      <div>
-                        <h4 className="font-semibold text-teal-900 mb-2">Risk Mitigation</h4>
-                        <p className="text-teal-800">{feature.riskMitigation}</p>
-                      </div>
+                  <div className="bg-teal-50 rounded-lg p-4 border border-teal-200">
+                    <div className="flex items-center space-x-2 mb-2">
+                      <DollarSign className="h-4 w-4 text-teal-600" />
+                      <span className="font-medium text-teal-900">Risk Mitigation Value</span>
                     </div>
+                    <p className="text-sm text-teal-800">{feature.riskMitigation}</p>
                   </div>
                 </div>
-
-                <div className="relative">
-                  <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200">
-                    <div className="aspect-square bg-teal-50 rounded-lg flex items-center justify-center mb-6">
-                      <Icon className="w-16 h-16 text-teal-600" />
-                    </div>
-                    <div className="space-y-4">
-                      <h4 className="text-lg font-semibold text-gray-900">Enterprise Benefits</h4>
-                      <div className="space-y-3">
-                        {feature.benefits.map((benefit, index) => (
-                          <div key={index} className="flex justify-between items-center">
-                            <span className="text-gray-600">{benefit.description}</span>
-                            <span className="font-semibold text-teal-600 text-lg">{benefit.metric}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              </motion.div>
             )
           })}
-        </div>
-      </section>
+        </motion.div>
+      </div>
+    </section>
+  )
+}
 
-      {/* Compliance ROI */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Enterprise Compliance ROI
+const RiskAnalysisSection: React.FC = () => {
+  const ref = useRef<HTMLDivElement>(null)
+  const isInView = useInView(ref, { once: true, margin: "-100px" })
+
+  return (
+    <section ref={ref} className="py-20 lg:py-32 bg-gray-50">
+      <div className="container mx-auto px-4">
+        <motion.div
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.15,
+                delayChildren: 0.2
+              }
+            }
+          }}
+          className="text-center mb-16"
+        >
+          <motion.div variants={{
+            hidden: { opacity: 0, y: 60 },
+            visible: { 
+              opacity: 1, 
+              y: 0,
+              transition: { duration: 0.6, ease: 'easeOut' }
+            }
+          }}>
+            <h2 className="text-3xl lg:text-5xl font-bold text-gray-900 mb-6">
+              Cannabis Compliance
+              <span className="block text-teal-700">Risk Analysis</span>
             </h2>
-            <p className="text-xl text-gray-600">
-              Pharmaceutical-grade compliance delivers measurable returns through risk prevention and operational efficiency.
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Understanding and mitigating the financial risks of cannabis compliance failures 
+              through pharmaceutical-grade prevention strategies.
             </p>
-          </div>
+          </motion.div>
+        </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-            {complianceROI.map((roi) => (
-              <div key={roi.category} className="text-center p-6 bg-gray-50 rounded-xl">
-                <div className="text-3xl font-bold text-teal-600 mb-2">{roi.annualSavings}</div>
-                <div className="font-semibold text-gray-900 mb-2">{roi.category}</div>
-                <div className="text-sm text-gray-600">{roi.description}</div>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center bg-teal-50 rounded-2xl p-8 border border-teal-200">
-            <div className="max-w-3xl mx-auto">
-              <h3 className="text-2xl font-bold text-teal-900 mb-4">
-                Total Annual Risk Protection: $1.65M Average
-              </h3>
-              <p className="text-teal-800 mb-6">
-                Enterprise cannabis operators using CultivateCo's pharmaceutical-grade compliance platform 
-                protect an average of $1.65 million annually in regulatory, financial, and operational risks.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/demo" className="inline-flex items-center justify-center px-6 py-3 bg-teal-600 text-white font-medium rounded-lg hover:bg-teal-700 transition-colors">
-                  Calculate Your ROI
-                  <BarChart3 className="ml-2 w-4 h-4" />
-                </Link>
-                <Link href="/pricing" className="inline-flex items-center justify-center px-6 py-3 border-2 border-teal-600 text-teal-600 font-medium rounded-lg hover:bg-teal-50 transition-colors">
-                  View Pricing Plans
-                  <ArrowRight className="ml-2 w-4 h-4" />
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Risk Categories */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Comprehensive Risk Categories
-            </h2>
-            <p className="text-xl text-gray-600">
-              Understanding the full spectrum of compliance risks facing enterprise cannabis operations.
-            </p>
-          </div>
-
-          <div className="space-y-8">
-            {riskCategories.map((category) => (
-              <div key={category.category} className="bg-white rounded-2xl p-8 shadow-sm">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">{category.category}</h3>
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {category.risks.map((risk, index) => (
-                    <div key={index} className="border border-gray-200 rounded-lg p-6 hover:border-teal-200 transition-colors">
-                      <div className="space-y-3">
-                        <h4 className="font-semibold text-gray-900">{risk.risk}</h4>
-                        <div className="text-2xl font-bold text-red-600">{risk.cost}</div>
-                        <div className="text-sm text-gray-600">Potential annual cost</div>
-                        <div className="flex items-center space-x-2 text-sm">
-                          <CheckCircle className="w-4 h-4 text-teal-500" />
-                          <span className="text-teal-700 font-medium">{risk.prevention}</span>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+        <motion.div
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.15,
+                delayChildren: 0.2
+              }
+            }
+          }}
+          className="grid md:grid-cols-2 gap-8"
+        >
+          {RISK_CATEGORIES.map((risk, index) => (
+            <motion.div
+              key={risk.category}
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { 
+                  opacity: 1, 
+                  y: 0,
+                  transition: { duration: 0.5, ease: 'easeOut' }
+                }
+              }}
+              className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200"
+            >
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold text-gray-900">{risk.category}</h3>
+                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                    risk.frequency === 'High' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'
+                  }`}>
+                    {risk.frequency} Risk
+                  </span>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* Enterprise Testimonials */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Compliance Success Stories
-            </h2>
-            <p className="text-xl text-gray-600">
-              Enterprise cannabis leaders share their pharmaceutical-grade compliance results.
-            </p>
-          </div>
+                <p className="text-gray-600 text-sm">{risk.description}</p>
 
-          <div className="grid lg:grid-cols-3 gap-8">
-            {testimonials.map((testimonial) => (
-              <div key={testimonial.name} className="bg-gray-50 rounded-xl p-8">
-                <div className="space-y-6">
-                  <div className="flex space-x-1">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
-                    ))}
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm font-medium text-gray-700">Average Cost:</span>
+                    <span className="text-lg font-bold text-red-600">{risk.averageCost}</span>
                   </div>
 
-                  <blockquote className="text-gray-700 italic">
-                    "{testimonial.quote}"
-                  </blockquote>
+                  <div className="bg-teal-50 rounded-lg p-3 border border-teal-200">
+                    <div className="flex items-center space-x-2 mb-1">
+                      <Shield className="h-4 w-4 text-teal-600" />
+                      <span className="font-medium text-teal-900 text-sm">CultivateCo Mitigation:</span>
+                    </div>
+                    <p className="text-sm text-teal-800">{risk.mitigation}</p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
 
-                  <div className="flex items-center space-x-4">
+        <motion.div
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          variants={{
+            hidden: { opacity: 0, y: 50 },
+            visible: { 
+              opacity: 1, 
+              y: 0,
+              transition: { duration: 0.6, ease: 'easeOut', delay: 0.6 }
+            }
+          }}
+          className="mt-16 text-center"
+        >
+          <div className="bg-gradient-to-br from-teal-600 to-cyan-600 text-white rounded-2xl p-8">
+            <div className="space-y-4">
+              <div className="flex items-center justify-center space-x-2">
+                <Award className="h-8 w-8" />
+                <h3 className="text-2xl font-bold">Total Risk Protection Value</h3>
+              </div>
+              <div className="text-4xl font-bold">$1.65M</div>
+              <p className="text-xl opacity-90">Average Annual Risk Mitigation per Enterprise Client</p>
+              <p className="text-sm opacity-75">
+                Based on analysis of 50+ multi-state operators using pharmaceutical-grade compliance
+              </p>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
+const EnterpriseTestimonialsSection: React.FC = () => {
+  const ref = useRef<HTMLDivElement>(null)
+  const isInView = useInView(ref, { once: true, margin: "-100px" })
+
+  return (
+    <section ref={ref} className="py-20 lg:py-32 bg-white">
+      <div className="container mx-auto px-4">
+        <motion.div
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.15,
+                delayChildren: 0.2
+              }
+            }
+          }}
+          className="text-center mb-16"
+        >
+          <motion.div variants={{
+            hidden: { opacity: 0, y: 60 },
+            visible: { 
+              opacity: 1, 
+              y: 0,
+              transition: { duration: 0.6, ease: 'easeOut' }
+            }
+          }}>
+            <h2 className="text-3xl lg:text-5xl font-bold text-gray-900 mb-6">
+              Enterprise Compliance
+              <span className="block text-teal-700">Success Stories</span>
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              C-level executives share how pharmaceutical-grade compliance transformed their multi-state operations 
+              and enabled institutional investment.
+            </p>
+          </motion.div>
+        </motion.div>
+
+        <motion.div
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.15,
+                delayChildren: 0.2
+              }
+            }
+          }}
+          className="grid lg:grid-cols-3 gap-8"
+        >
+          {ENTERPRISE_TESTIMONIALS.map((testimonial) => (
+            <motion.div
+              key={testimonial.id}
+              variants={{
+                hidden: { opacity: 0, scale: 0.8 },
+                visible: { 
+                  opacity: 1, 
+                  scale: 1,
+                  transition: { duration: 0.5, ease: 'easeOut' }
+                }
+              }}
+              className="bg-gray-50 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200"
+            >
+              <div className="space-y-6">
+                <div className="flex space-x-1">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                  ))}
+                </div>
+
+                <blockquote className="text-gray-700 italic">
+                  "{testimonial.quote}"
+                </blockquote>
+
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-3">
                     <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center">
                       <Users className="w-6 h-6 text-teal-600" />
                     </div>
-                    <div className="flex-1">
+                    <div>
                       <div className="font-semibold text-gray-900">{testimonial.name}</div>
                       <div className="text-sm text-gray-600">{testimonial.title}</div>
                       <div className="text-sm text-gray-600">{testimonial.company}</div>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-200">
-                    <div className="text-center">
-                      <div className="text-xl font-bold text-teal-600">{testimonial.compliance_score}</div>
-                      <div className="text-xs text-gray-600">Compliance Score</div>
+                  <div className="bg-teal-50 rounded-lg p-3 border border-teal-200">
+                    <div className="flex items-center space-x-2">
+                      <TrendingUp className="h-4 w-4 text-teal-600" />
+                      <span className="font-medium text-teal-900 text-sm">Business Impact:</span>
                     </div>
-                    <div className="text-center">
-                      <div className="text-xl font-bold text-teal-600">{testimonial.states}</div>
-                      <div className="text-xs text-gray-600">States Managed</div>
-                    </div>
+                    <p className="text-sm text-teal-800 font-semibold">{testimonial.savings}</p>
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  )
+}
 
-      {/* Enterprise CTA */}
-      <section className="py-20 bg-gradient-to-br from-teal-600 via-cyan-600 to-blue-600 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl font-bold mb-6">
-            Ready for Pharmaceutical-Grade Cannabis Compliance?
-          </h2>
-          <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-            Stop risking $50,000 - $2M+ in regulatory fines. Join enterprise cannabis operators who trust 
-            pharmaceutical-grade compliance for their multi-state operations.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <Link href="/demo" className="inline-flex items-center justify-center px-8 py-4 bg-white text-teal-700 font-semibold rounded-lg hover:bg-white/90 transition-colors">
-              Schedule Compliance Demo
-              <ArrowRight className="ml-2 w-5 h-5" />
-            </Link>
-            <Link href="/contact" className="inline-flex items-center justify-center px-8 py-4 border-2 border-white text-white font-semibold rounded-lg hover:bg-white/10 transition-colors">
-              Speak with Compliance Expert
-              <Phone className="ml-2 w-5 h-5" />
-            </Link>
-          </div>
+// ============================================================================
+// MAIN COMPLIANCE PAGE COMPONENT
+// ============================================================================
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
-            <div>
-              <div className="text-3xl font-bold text-cyan-200">99.99%</div>
-              <div className="text-white/80">Compliance Score</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-cyan-200">25,000+</div>
-              <div className="text-white/80">Violations Prevented</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-cyan-200">$1.65M</div>
-              <div className="text-white/80">Average Risk Protection</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-cyan-200">15+</div>
-              <div className="text-white/80">States Supported</div>
-            </div>
-          </div>
-        </div>
-      </section>
+const CompliancePage: React.FC = () => {
+  return (
+    <CannabisLayout seo={{
+      title: 'Enterprise Cannabis Compliance | Pharmaceutical-Grade Platform | CultivateCo',
+      description: 'Prevent $50K-$2M+ in regulatory fines with pharmaceutical-grade cannabis compliance. SOC 2 Type II certified platform for multi-state operators.',
+      keywords: [
+        'enterprise cannabis compliance',
+        'pharmaceutical-grade cannabis compliance',
+        'multi-state cannabis compliance platform',
+        'cannabis regulatory compliance software',
+        'SOC 2 cannabis compliance',
+        'cannabis banking compliance',
+        'institutional cannabis compliance',
+        'cannabis compliance automation',
+        'pharmaceutical validation cannabis',
+        'enterprise cannabis risk management',
+      ],
+      ogTitle: 'Enterprise Cannabis Compliance | CultivateCo',
+      ogDescription: 'Pharmaceutical-grade compliance platform preventing $50K-$2M+ in regulatory fines. SOC 2 certified for multi-state cannabis operations.',
+      ogImage: 'https://cultivateco.com/og-cannabis-compliance.jpg',
+    }}>
+      <ComplianceHeroSection />
+      <ComplianceFeaturesSection />
+      <RiskAnalysisSection />
+      <EnterpriseTestimonialsSection />
     </CannabisLayout>
   )
 }
